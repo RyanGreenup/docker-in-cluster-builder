@@ -65,18 +65,8 @@ export const baseConfig = defineConfig({
     "jsdoc-js/require-returns-description": "error",
     "jsdoc-js/valid-types": "error",
 
-    // Import ordering is owned by ESLint's `sort-imports`; oxfmt import sorting
-    // currently panics on top-level TypeDoc module comments before imports.
-    "sort-imports": [
-      "error",
-      {
-        allowSeparatedGroups: true,
-        ignoreCase: false,
-        ignoreDeclarationSort: false,
-        ignoreMemberSort: false,
-        memberSyntaxSortOrder: ["multiple", "all", "single", "none"],
-      },
-    ],
+    /** Import ordering is owned by oxfmt; disabled to avoid fighting its sort. */
+    "sort-imports": "off",
     // --- Style limits --- (
     // NOTE these are the default for the style category
     // explicit to avoid regressions etc.
