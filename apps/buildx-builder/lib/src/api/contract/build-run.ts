@@ -7,6 +7,7 @@ export const BuildStep = z
   .object({
     completed_at: isoDateTime.nullable(),
     conclusion: Conclusion.nullable(),
+    error: z.string().nullable().default(null),
     name: z.string(),
     number: z.number().int().positive(),
     started_at: isoDateTime.nullable(),

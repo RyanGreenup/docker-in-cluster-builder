@@ -40,6 +40,7 @@ describe("triggerBuild", () => {
     expect(run.tag).toBe("registry.example.com/app:abc123");
     expect(run.steps).toHaveLength(1);
     expect(run.steps[0]?.conclusion).toBe("success");
+    expect(run.steps[0]?.error).toBeNull();
     expect(buildImageMock).toHaveBeenCalledWith(
       expect.objectContaining({ contextDir: "/ctx", push: false }),
     );
@@ -54,6 +55,17 @@ describe("triggerBuild", () => {
 
     expect(run.conclusion).toBe("failure");
     expect(run.steps[0]?.conclusion).toBe("failure");
+    expect(run.steps[0]?.error).toBe("boom");
+  });
+
+  it("surfaces a non-Error rejection as a string on the step", async () => {
+    const run = await triggerBuild(validRequest, {
+      build: () => Promise.reject("plain failure"),
+      now: () => FIXED_NOW,
+      runId: () => FIXED_ID,
+    });
+
+    expect(run.steps[0]?.error).toBe("plain failure");
   });
 
   it("falls back to the default build runner, clock and id", async () => {

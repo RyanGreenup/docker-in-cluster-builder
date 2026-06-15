@@ -13,16 +13,29 @@ export interface TriggerBuildDeps {
   runId?: () => number;
 }
 
+/** Outcome of running the buildx step: a CI conclusion and any error message. */
+interface StepOutcome {
+  conclusion: Conclusion;
+  error: string | null;
+}
+
+const errorMessage = (cause: unknown): string => {
+  if (cause instanceof Error) {
+    return cause.message;
+  }
+  return String(cause);
+};
+
 /**
  * Run the buildx job, mapping success or thrown errors to a CI conclusion.
  * @param build - The build runner to invoke.
  * @param inputs - Validated docker build inputs.
- * @returns "success" if the build resolved, otherwise "failure".
+ * @returns The conclusion, plus the error message when the build failed.
  */
 const runBuildStep = async (
   build: (options: BuildOptions) => Promise<void>,
   inputs: BuildRequest["inputs"],
-): Promise<Conclusion> => {
+): Promise<StepOutcome> => {
   try {
     await build({
       cacheRef: inputs.cacheRef,
@@ -32,9 +45,9 @@ const runBuildStep = async (
       tag: inputs.tag,
       timeout: inputs.timeout,
     });
-    return "success";
-  } catch {
-    return "failure";
+    return { conclusion: "success", error: null };
+  } catch (error) {
+    return { conclusion: "failure", error: errorMessage(error) };
   }
 };
 
@@ -53,11 +66,11 @@ export const triggerBuild = async (
   const now = deps.now ?? defaultNow;
 
   const startedAt = now().toISOString();
-  const conclusion = await runBuildStep(build, request.inputs);
+  const outcome = await runBuildStep(build, request.inputs);
   const completedAt = now().toISOString();
 
   return BuildRun.parse({
-    conclusion,
+    conclusion: outcome.conclusion,
     created_at: startedAt,
     event: request.event,
     head_ref: request.ref,
@@ -68,7 +81,8 @@ export const triggerBuild = async (
     steps: [
       {
         completed_at: completedAt,
-        conclusion,
+        conclusion: outcome.conclusion,
+        error: outcome.error,
         name: "Build image",
         number: BUILD_STEP_NUMBER,
         started_at: startedAt,
