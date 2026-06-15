@@ -1,0 +1,26 @@
+{
+  "name": "@rs/oxlint-config",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "echo 'No checks configured'"
+  },
+  "exports": {
+    "./base": "./base.ts",
+    "./lenient": "./lenient.ts",
+    "./solid-js": "./solid-js.ts",
+    "./fmt": "./fmt/base.ts"
+  },
+  "dependencies": {
+    "oxlint-tsgolint": "^0.23.0"
+  },
+  "devDependencies": {
+    "eslint-plugin-jsdoc": "^50.0.0",
+    "eslint-plugin-sonarjs": "^4.0.3",
+    "eslint-plugin-solid": "^0.14.5",
+    "eslint-plugin-turbo": "^2.7.1",
+    "oxfmt": "^0.51.0",
+    "oxlint": "1.61.0"
+  }
+}

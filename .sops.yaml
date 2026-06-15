@@ -1,0 +1,14 @@
+creation_rules:
+  - path_regex: \.env.yaml$
+    # ryan (age keypair + ssh-ed25519), ian (age keypair)
+    age: >-
+      age1akugayf5a9uw432mtvh9zlw7vz93j0te2f9frtkar8uwmlfl54lsjelvar,
+      age1rg3wy6khd3ezjguvj8fm4e5znaprrwctq0q5n4aw8mnyvu8yvp0sjp9ht9,
+      age1hsk8s90fhjefn07lym4wqhhdcs9md9svs9nlz7ruspjweu5ftv5qqd9jhd,
+  - path_regex: \.secrets/.*\.(json|ya?ml)$
+    # ryan (age keypair + ssh-ed25519), ian (age keypair), server (age keypair)
+    age: >-
+      age1akugayf5a9uw432mtvh9zlw7vz93j0te2f9frtkar8uwmlfl54lsjelvar,
+      age1rg3wy6khd3ezjguvj8fm4e5znaprrwctq0q5n4aw8mnyvu8yvp0sjp9ht9,
+      age1hsk8s90fhjefn07lym4wqhhdcs9md9svs9nlz7ruspjweu5ftv5qqd9jhd,
+      age1tl0n8hn35tz3ecsevmtt7qq4s3qwr2xls0pxf4sf22f08q8dq34q7wql9y
