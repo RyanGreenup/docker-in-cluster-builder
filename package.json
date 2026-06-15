@@ -20,6 +20,7 @@
   "devDependencies": {
     "sherif": "^1.11.1",
     "syncpack": "^15.3.1",
+    "taze": "^19.9.2",
     "turbo": "^2.9.14",
     "typescript": "^6.0.3"
   },
