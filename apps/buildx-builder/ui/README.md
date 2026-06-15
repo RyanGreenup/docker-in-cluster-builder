@@ -1,4 +1,4 @@
-Welcome to your new TanStack Start app! 
+Welcome to your new TanStack Start app!
 
 # Getting Started
 
@@ -30,8 +30,6 @@ If you prefer not to use Tailwind CSS:
 3. Remove `tailwindcss()` from the plugins array in `vite.config.ts`
 4. Uninstall the packages: `pnpm add @tailwindcss/vite tailwindcss --dev`
 
-
-
 ## Routing
 
 This project uses [TanStack Router](https://tanstack.com/router) with file-based routing. Routes are managed as files in `src/routes`.
@@ -49,7 +47,7 @@ Now that you have two routes you can use a `Link` component to navigate between 
 To use SPA (Single Page Application) navigation you will need to import the `Link` component from `@tanstack/solid-router`.
 
 ```tsx
-import { Link } from "@tanstack/solid-router";
+import { Link } from '@tanstack/solid-router'
 ```
 
 Then anywhere in your JSX you can use it like so:
@@ -103,9 +101,7 @@ function PeopleComponent() {
   const data = Route.useLoaderData()
   return (
     <ul>
-      <For each={data().results}>
-        {(person) => <li>{person.name}</li>}
-      </For>
+      <For each={data().results}>{(person) => <li>{person.name}</li>}</For>
     </ul>
   )
 }
@@ -117,9 +113,7 @@ Loaders simplify your data fetching logic dramatically. Check out more informati
 
 Files prefixed with `demo` can be safely deleted. They are there to provide a starting point for you to play around with the features you've installed.
 
-
 ## Linting & Formatting
-
 
 This project uses [eslint](https://eslint.org/) and [prettier](https://prettier.io/) for linting and formatting. Eslint is configured using [tanstack/eslint-config](https://tanstack.com/config/latest/docs/eslint). The following scripts are available:
 
@@ -128,7 +122,6 @@ pnpm lint
 pnpm format
 pnpm check
 ```
-
 
 # Learn More
 
