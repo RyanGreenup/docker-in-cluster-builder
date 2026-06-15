@@ -37,12 +37,14 @@ client instance is shared through `globalThis` rather than imported [2]. A naive
 `typeof window === 'undefined'` check is called out as insufficient because it
 "exposes your router logic to the client" [2].
 
-Note: `server-only` enforces itself through bundler export conditions (the
-React Server Components `react-server` condition). A plain SPA bundler (for
-example a non-RSC Vite app) does not resolve that condition, so a local
-equivalent (a bundler plugin that refuses to load server modules into the client
-graph) plays the same role. This is a substitute for `server-only`, not a new
-requirement.
+Note: the `server-only` package is a Next.js/Vercel convention that produces a
+build-time error if a guarded module is pulled into client code; Next.js handles
+those imports internally rather than from the npm package contents [5]. It works
+only on a bundler that treats it specially: an RSC-aware bundler (Next.js) does,
+a plain non-RSC Vite SPA does not. So a local equivalent (a bundler plugin that
+refuses to load server modules into the client graph) plays the same role. This
+is a substitute for `server-only`, not a new requirement. oRPC's docs simply use
+`import 'server-only'` and assume the bundler honors it [2].
 
 ## Single package (one app, no shared packages)
 
@@ -120,3 +122,4 @@ code, by `server-only` [1][2][3][4].
 2. Optimize Server-Side Rendering (SSR) - oRPC: https://orpc.dev/docs/best-practices/optimize-ssr
 3. Monorepo Setup - oRPC: https://orpc.dev/docs/best-practices/monorepo-setup
 4. Contract-first, Define Contract - oRPC: https://orpc.dev/docs/contract-first/define-contract
+5. Server and Client Components (Preventing environment poisoning) - Next.js: https://nextjs.org/docs/app/getting-started/server-and-client-components

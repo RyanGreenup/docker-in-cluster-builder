@@ -10,16 +10,21 @@
 ```
 apps/buildx-builder/
 ├── api/src/
-│   ├── index.ts        # Library entry: procedures + router (NO server code)
-│   └── server.ts       # Standalone HTTP server entry point
+│   ├── index.ts        # procedures + router (a runtime VALUE: the handlers)
+│   └── server.ts       # standalone HTTP server entry point
 └── ui/src/
+    ├── orpc.ts         # shared typed client (imports the router TYPE only)
     └── routes/
-        └── index.tsx   # SolidJS route consuming the API
+        └── index.tsx   # SolidJS route consuming the client
 ```
 
-**Key boundary**: Library entry (`index.ts`) exports only type-safe definitions. The HTTP
-server is a separate file that imports the router. This prevents side-effects when the UI
-imports `@rs/buildx-builder-api`.
+**Key boundary**: `index.ts` exports the procedures and the `router`. The `router` is a
+runtime value that contains the handlers, so it is server code, not "just types". The UI
+must therefore import it as a **type only** (`import type { router }`), which is erased at
+compile time so no server code is bundled into the browser [1]. Splitting the HTTP entry
+into `server.ts` only keeps the `listen()` side effect out of `index.ts`; it does not make
+`index.ts` safe to *value*-import. See
+[orpc-avoiding-cross-bundling.md](./orpc-avoiding-cross-bundling.md) for the full reasoning.
 
 ---
 
@@ -62,9 +67,11 @@ export const router = {
 - Use `os` builder from `@orpc/server` for each procedure.
 - Zod schemas define input validation. Use named constants for magic numbers
   (oxlint `no-magic-numbers` requires it).
-- Import `zod` as `* as zod` — the alias must be ≥ 2 chars for oxlint `id-length`.
+- Import `zod` as `* as zod`: the alias must be at least 2 chars for oxlint `id-length`.
 - Unused handler params get `_` prefix: `({ input: _input })`.
-- Return plain data — oRPC serializes automatically.
+- Return plain data: the RPC handler serializes it over oRPC's protocol [2].
+- The exported `router` is a runtime value (the handlers): consume it from the
+  client as a **type only** so server code never reaches the browser [1].
 
 ---
 
@@ -100,57 +107,74 @@ server.listen(3001, "127.0.0.1", () =>
 
 ### Key points
 
-- `RPCHandler` wraps the router and provides the HTTP adapter.
-- `CORSPlugin` enables cross-origin requests from the Vite dev server.
+- `RPCHandler` speaks oRPC's proprietary RPC protocol over HTTP and is built for
+  `RPCLink`; it does not serve OpenAPI, and you should not craft requests to it by
+  hand [2]. It serializes native types (Date, BigInt, Map, Set, etc.), so the wire
+  format is not plain JSON [2].
+- `CORSPlugin` configures cross-origin requests [3]; in this setup that is needed
+  for the Vite dev server (different port) and for cross-origin clients such as
+  Capacitor builds.
 - `onError` interceptor catches all procedure errors for logging.
-- Port **3001** — choose a port that doesn't conflict with the Vite dev server (usually 3000).
+- Port **3001**: choose a port that does not conflict with the Vite dev server (usually 3000).
 
 ### URL format
 
-The RPC protocol uses **slash-separated procedure paths**:
+Procedure paths are slash-separated; with no `prefix` set, `router.planet.list`
+is reached at `/planet/list`, and with `prefix: '/rpc'` at `/rpc/planet/list` [4]:
 
 ```
-POST /planet/list          # calls router.planet.list
-POST /planet/find          # calls router.planet.find
-GET  /planet/list?data=%7B%22cursor%22%3A0%7D   # GET variant
+POST /planet/list          # input travels in the request body
+POST /planet/find
 ```
 
-⚠️ The procedure name uses `/` slashes, **not** `.` dots. `toHttpPath(["planet","list"])`
-returns `/planet/list`, so that's what the matcher expects.
+By default `RPCLink` uses `POST` and sends the input in the body; `GET` is opt-in
+per call via the link's `method` option for read-style calls, where the input is
+URL-encoded into a `data` query parameter [5][4]. The path uses `/` slashes,
+never `.` dots.
 
 ---
 
 ## Step 3 — Client: ORPC Client Setup
 
-```tsx
-// apps/buildx-builder/ui/src/routes/index.tsx
+Define the client once in a shared module and reuse it across routes:
+
+```ts
+// apps/buildx-builder/ui/src/orpc.ts
 import { createORPCClient } from "@orpc/client";
 import { RPCLink } from "@orpc/client/fetch";
 import type { RouterClient } from "@orpc/server";
-import type { router } from "@rs/buildx-builder-api";
+import type { router } from "@rs/buildx-builder-api"; // TYPE ONLY
 
 const link = new RPCLink({ url: "http://127.0.0.1:3001" });
-const orpc: RouterClient<typeof router> = createORPCClient(link);
+
+export const client: RouterClient<typeof router> = createORPCClient(link);
 ```
 
 ### Key points
 
-- `RPCLink` handles the RPC protocol (serialization, URL construction).
-- `RouterClient<typeof router>` gives full type safety — `orpc.planet.list()` is
-  autocompleted and typed from the server definition.
-- The URL **must not** include a `/rpc` prefix unless the server also configures one
-  (via `prefix` option in `RPCHandler`).
-- `@orpc/server` must be a dependency of the UI package (for the `RouterClient` type).
+- `RPCLink` handles the RPC protocol: serialization and URL construction [5].
+- `RouterClient<typeof router>` gives full type safety: `client.planet.list()` is
+  autocompleted and typed from the server definition [1].
+- `router` and `RouterClient` are imported with `import type`, so they are erased and
+  no server code is bundled into the browser [1].
+- The link URL **must not** include a `/rpc` prefix unless the server also configures
+  one (via the `prefix` option in `RPCHandler`); paths are otherwise served from the
+  root, e.g. `/planet/list` [4].
+- `@orpc/server` is needed only for the `RouterClient` **type**; the value runtime is
+  never imported into the client.
 
 ---
 
 ## Step 4 — Client: SolidJS Data Fetching
 
 ```tsx
+// apps/buildx-builder/ui/src/routes/index.tsx
 import { createResource, For, Show } from "solid-js";
 
+import { client } from "../orpc";
+
 async function fetchPlanets() {
-  return orpc.planet.list({ cursor: 0 });
+  return client.planet.list({ cursor: 0 });
 }
 
 function Home() {
@@ -260,10 +284,11 @@ Keep the API server on a fixed port (3001) and Vite on 3000 so they never collid
 
 ### Validation errors (400 Bad Request)
 
-ORPC uses its own wire format (not raw JSON). The `RPCLink` client handles serialization
-automatically — `curl` testing requires the correct serialization wrapper, which is why
-direct curl calls often produce deserialization errors. Use the ORPC client for integration
-testing.
+oRPC uses its own wire format, not raw JSON: the body (or the GET `data` query param) is a
+`{ json, meta }` envelope where `meta` carries type hints for values like `Date` [2][4].
+`RPCLink` builds this automatically, so direct `curl` calls fail unless they reproduce the
+envelope, and the handler is meant for `RPCLink` rather than manual requests [2]. Use the
+oRPC client for integration testing.
 
 ### Import errors in UI
 
@@ -293,11 +318,23 @@ Server (api/src/index.ts)
        │      └─ new RPCHandler(router)
        │      └─ HTTP server on :3001
        │
-       └──► Client (ui/src/routes/index.tsx)
-              └─ RouterClient<typeof router>  ← full type inference
+       └──► Client (ui/src/orpc.ts, consumed by routes)
+              └─ import type { router }            (type only, erased)
+              └─ RouterClient<typeof router>       (full type inference)
               └─ RPCLink({ url: "http://127.0.0.1:3001" })
-              └─ orpc.planet.list({ cursor: 0 })  ← autocompleted, typed
+              └─ client.planet.list({ cursor: 0 }) (autocompleted, typed)
 ```
 
 The `typeof router` type flows from the server definition through `RouterClient<typeof router>`
-into the client, giving autocomplete on procedure names and typed inputs/outputs.
+into the client, giving autocomplete on procedure names and typed inputs/outputs. Because the
+import is type-only, this inference carries no server code into the bundle [1].
+
+---
+
+## Sources
+
+1. Client-Side Clients - oRPC: https://orpc.dev/docs/client/client-side
+2. RPC Handler - oRPC: https://orpc.dev/docs/rpc-handler
+3. CORS Plugin - oRPC: https://orpc.dev/docs/plugins/cors
+4. RPC Protocol - oRPC: https://orpc.dev/docs/advanced/rpc-protocol
+5. RPC Link - oRPC: https://orpc.dev/docs/client/rpc-link
