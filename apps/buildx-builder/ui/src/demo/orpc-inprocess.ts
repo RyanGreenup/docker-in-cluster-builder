@@ -14,6 +14,8 @@
  * no network serialization, yet `api.builds.trigger(...)` keeps the exact same
  * end-to-end type inference you get over the wire. Swap `createRouterClient`
  * for an `RPCLink` later and not a single call site changes.
+ *
+ * Cross bundling is handled through a plugin in {@link ../../vite.config.ts}
  */
 import { createRouterClient, ORPCError, os } from '@orpc/server'
 import * as zod from 'zod'
