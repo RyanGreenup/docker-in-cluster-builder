@@ -9,10 +9,10 @@ import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin'
 
 export default defineConfig({
   resolve: { tsconfigPaths: true },
-  // The design package ships `.css.ts` source. Exclude it so Vite's dep
-  // optimizer doesn't pre-bundle it past vanillaExtractPlugin (which would throw
-  // at runtime). See the package README.
-  optimizeDeps: { exclude: ['@rs/ryan-personal-website-design'] },
+  // These packages ship `.css.ts` source. Exclude them so Vite's dep optimizer
+  // doesn't pre-bundle them past vanillaExtractPlugin (which would throw at
+  // runtime). See each package's README.
+  optimizeDeps: { exclude: ['@rs/ryan-personal-website-design', '@rs/layout'] },
   plugins: [
     devtools(),
     tanstackRouter({ target: 'solid', autoCodeSplitting: true }),

@@ -1,5 +1,6 @@
-import { createFileRoute } from '@tanstack/solid-router'
+import { createFileRoute, Link } from '@tanstack/solid-router'
 import { Button } from '../components/Button'
+import { HelloWorld } from '@rs/buildx-builder-server'
 
 export const Route = createFileRoute('/')({ component: Home })
 
@@ -9,6 +10,11 @@ function Home() {
       <h1>Welcome to TanStack Start</h1>
       <p>
         Edit <code>src/routes/index.tsx</code> to get started.
+      </p>
+      <p>
+        See the <Link to="/dashboard">dashboard layout</Link> built on{' '}
+        <code>@rs/layout</code> (<code>src/components/DashboardShell.tsx</code>
+        ).
       </p>
 
       <h2>Design system button</h2>
@@ -32,6 +38,7 @@ function Home() {
         <Button variant="ghost">Ghost</Button>
         <Button variant="danger">Danger</Button>
         <Button variant="link">Link</Button>
+        <Button variant="link">{HelloWorld()}</Button>
       </div>
 
       <div
