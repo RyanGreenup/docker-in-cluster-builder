@@ -1,21 +1,12 @@
 import { createFileRoute, Link } from '@tanstack/solid-router'
 import { createResource, For, Show } from 'solid-js'
-import { createORPCClient } from '@orpc/client'
-import { RPCLink } from '@orpc/client/fetch'
-import type { RouterClient } from '@orpc/server'
-import type { router } from '@rs/buildx-builder-api'
 
 import { Button } from '../components/Button'
-
-/** Base URL for the oRPC API server */
-const API_URL = 'http://127.0.0.1:3001'
-
-const link = new RPCLink({ url: API_URL })
-const orpc: RouterClient<typeof router> = createORPCClient(link)
+import { client } from '../orpc'
 
 /** Fetch the list of planets from the API */
 async function fetchPlanets() {
-  return orpc.planet.list({ cursor: 0 })
+  return client.planet.list({ cursor: 0 })
 }
 
 export const Route = createFileRoute('/')({ component: Home })
@@ -50,8 +41,7 @@ function Home() {
             <For each={planets()}>
               {(planet) => (
                 <li>
-                  {planet.name}{' '}
-                  <small>(id: {planet.id})</small>
+                  {planet.name} <small>(id: {planet.id})</small>
                 </li>
               )}
             </For>

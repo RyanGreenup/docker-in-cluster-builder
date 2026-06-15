@@ -21,5 +21,7 @@ Any new server-only package must be added to that `packages` list in
 not depend on yet is safe: it is skipped until it becomes resolvable, then
 guarded automatically.
 
-The in-process oRPC demo that used to live here is not server-only (it runs in
-the browser) and now lives at `src/demo/orpc-inprocess.ts`.
+The build service that briefly lived here now lives in the API package
+`@rs/buildx-builder-api`, where server code belongs. The UI calls it over HTTP
+through the shared typed client in `src/orpc.ts`, importing the router as a type
+only. See `docs/orpc-avoiding-cross-bundling.md`.

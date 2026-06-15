@@ -10,34 +10,20 @@ import {
 } from 'solid-js'
 
 import { Button } from '../components/Button'
-import type { Build } from '../demo/orpc-inprocess'
-import { api } from '../demo/orpc-inprocess'
+import { client } from '../orpc'
+import type { Build } from '@rs/buildx-builder-api'
 
 /**
- * Demonstration route for the single-file oRPC service in
- * `src/demo/orpc-inprocess.ts`. There is no API server behind this: `api` is the
- * in-process `createRouterClient`, so the calls below run the procedures
- * directly while staying fully typed.
+ * Builds route. Calls the oRPC API over HTTP through the shared typed `client`
+ * (`src/orpc.ts`); the `Build` type and the client's `router` type come from
+ * `@rs/buildx-builder-api` imported as types only, so no server code is bundled
+ * into the browser. See `docs/orpc-avoiding-cross-bundling.md`.
  *
  * `createResource` returns a promise-backed signal that Solid's `<Suspense>`
  * tracks automatically: reading `builds()` while it is still loading suspends
  * the subtree and shows the boundary's `fallback` instead.
  */
 export const Route = createFileRoute('/builds')({ component: BuildsPage })
-
-/** Delay (ms) before the demo data resolves, so the fallback is visible. */
-const RESOLVE_DELAY_MS = 600
-
-/**
- * Resolve after a short delay so the suspense fallback is observable.
- *
- * @param ms - Milliseconds to wait before resolving.
- */
-async function delay(ms: number): Promise<void> {
-  await new Promise((resolve) => {
-    setTimeout(resolve, ms)
-  })
-}
 
 // Controls for triggering a new build by image tag.
 function TriggerForm(props: {
@@ -106,15 +92,12 @@ function BuildsPage() {
   const [tag, setTag] = createSignal('app:latest')
   const [pending, setPending] = createSignal(false)
 
-  const [builds, { refetch }] = createResource(async () => {
-    await delay(RESOLVE_DELAY_MS)
-    return api.builds.list()
-  })
+  const [builds, { refetch }] = createResource(() => client.builds.list())
 
   async function triggerBuild(): Promise<void> {
     setPending(true)
     try {
-      await api.builds.trigger({ tag: tag() })
+      await client.builds.trigger({ tag: tag() })
       await refetch()
     } finally {
       setPending(false)
@@ -125,10 +108,10 @@ function BuildsPage() {
     <div style={{ padding: '2rem', 'font-family': 'var(--font-sans)' }}>
       <h1>Builds</h1>
       <p>
-        Backed entirely by <code>src/demo/orpc-inprocess.ts</code>, an
-        in-process oRPC router. No HTTP server, no network. Trigger a build and
-        the list below refetches through a <code>&lt;Suspense&gt;</code>{' '}
-        boundary.
+        Backed by the oRPC API in <code>@rs/buildx-builder-api</code>, called
+        over HTTP through the shared typed client in <code>src/orpc.ts</code>.
+        Trigger a build and the list below refetches through a{' '}
+        <code>&lt;Suspense&gt;</code> boundary.
       </p>
 
       <TriggerForm

@@ -55,7 +55,59 @@ export const createPlanet = os
   .input(PlanetSchema.omit({ id: true }))
   .handler(({ input: _input, context: _context }) => [{ id: 1, name: "name" }]);
 
+/** Lowest valid build id; ids count up from here. */
+const FIRST_BUILD_ID = 1;
+/** Minimum tag length so an empty image tag is rejected. */
+const TAG_MIN_LENGTH = 1;
+
+/** Lifecycle states a build moves through. */
+const BuildStatusSchema = zod.enum(["queued", "running", "succeeded", "failed"]);
+
+/** A docker buildx build tracked by the service. */
+const BuildSchema = zod.object({
+  id: zod.number().int().min(FIRST_BUILD_ID),
+  status: BuildStatusSchema,
+  tag: zod.string().min(TAG_MIN_LENGTH),
+});
+
+export type Build = zod.infer<typeof BuildSchema>;
+
+/** In-memory store standing in for a real build backend. */
+const builds: Build[] = [];
+
+/** Queue a new build for an image tag and return the created record. */
+export const triggerBuild = os.input(BuildSchema.pick({ tag: true })).handler(({ input }) => {
+  const build: Build = {
+    id: builds.length + FIRST_BUILD_ID,
+    status: "queued",
+    tag: input.tag,
+  };
+  builds.push(build);
+  return build;
+});
+
+/** List every build the service has seen, in the order they were triggered. */
+export const listBuilds = os.handler(() => [...builds]);
+
+/** Fetch a single build by id, or fail with NOT_FOUND. */
+export const findBuild = os.input(BuildSchema.pick({ id: true })).handler(({ input }) => {
+  const build = builds.find((candidate) => candidate.id === input.id);
+
+  if (!build) {
+    throw new ORPCError("NOT_FOUND", {
+      message: `No build with id ${input.id}`,
+    });
+  }
+
+  return build;
+});
+
 export const router = {
+  builds: {
+    find: findBuild,
+    list: listBuilds,
+    trigger: triggerBuild,
+  },
   planet: {
     create: createPlanet,
     find: findPlanet,
