@@ -1,8 +1,7 @@
-import { createServer } from "node:http";
-
 import { onError } from "@orpc/server";
 import { RPCHandler } from "@orpc/server/node";
 import { CORSPlugin } from "@orpc/server/plugins";
+import { createServer } from "node:http";
 
 import { router } from "./index";
 

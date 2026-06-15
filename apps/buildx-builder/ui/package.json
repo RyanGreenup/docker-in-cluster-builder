@@ -23,7 +23,8 @@
     "@tanstack/solid-router-devtools": "^1.167.0",
     "@vanilla-extract/recipes": "^0.5.7",
     "@vanilla-extract/sprinkles": "^1.6.5",
-    "solid-js": "^1.9.13"
+    "solid-js": "^1.9.13",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@rs/eslint-config": "workspace:*",

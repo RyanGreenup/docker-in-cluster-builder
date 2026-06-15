@@ -1,4 +1,5 @@
 import { createSignal, For, Show, type JSXElement } from 'solid-js'
+import { useNavigate } from '@tanstack/solid-router'
 import { DashboardLayout } from '@rs/layout'
 import { Button } from './Button'
 import * as styles from './dashboard-shell.css'
@@ -11,13 +12,19 @@ import * as styles from './dashboard-shell.css'
 // bottom tab bar. We supply only the slot content and a `classes` skin. The
 // active nav row and active tab are app state, held here as signals.
 
-const NAV = [
-  'Overview',
-  'Builds',
-  'Artifacts',
-  'Pipelines',
-  'Settings',
-] as const
+/** A sidebar destination. `to` makes the row navigate to a real route. */
+interface NavItem {
+  readonly label: string
+  readonly to?: '/builds'
+}
+
+const NAV: readonly NavItem[] = [
+  { label: 'Overview' },
+  { label: 'Builds', to: '/builds' },
+  { label: 'Artifacts' },
+  { label: 'Pipelines' },
+  { label: 'Settings' },
+]
 const TABS = ['Home', 'Builds', 'Artifacts', 'Activity'] as const
 
 const SECTIONS = [
@@ -61,6 +68,7 @@ export interface DashboardShellProps {
 export function DashboardShell(props: DashboardShellProps): JSXElement {
   const [active, setActive] = createSignal<string>('Overview')
   const [tab, setTab] = createSignal<string>('Home')
+  const navigate = useNavigate()
 
   return (
     <DashboardLayout
@@ -74,14 +82,19 @@ export function DashboardShell(props: DashboardShellProps): JSXElement {
       brand={() => <div class={styles.brand}>Buildx</div>}
       nav={(ctx) => (
         <For each={NAV}>
-          {(label) => (
+          {(item) => (
             <button
               {...ctx.navItemProps({
-                active: active() === label,
-                onSelect: () => setActive(label),
+                active: active() === item.label,
+                onSelect: () => {
+                  setActive(item.label)
+                  if (item.to) {
+                    void navigate({ to: item.to })
+                  }
+                },
               })}
             >
-              {label}
+              {item.label}
             </button>
           )}
         </For>

@@ -216,6 +216,9 @@ importers:
       solid-js:
         specifier: ^1.9.13
         version: 1.9.13
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
     devDependencies:
       '@rs/eslint-config':
         specifier: workspace:*
