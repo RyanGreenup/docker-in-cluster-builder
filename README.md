@@ -2,6 +2,10 @@
 
 Generic TypeScript CLI and library bundle.
 
+> [!NOTE]
+> Some packages are imported from our local npm registry (kubernetes-3)
+> via .npmrc.
+
 ## Packages
 
 - `apps/buildx-builder/lib` exports reusable placeholder library functions.
