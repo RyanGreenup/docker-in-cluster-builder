@@ -16,7 +16,7 @@ export interface TriggerBuildDeps {
 /** Outcome of running the buildx step: a CI conclusion and any error message. */
 interface StepOutcome {
   conclusion: Conclusion;
-  error: string | null;
+  error?: string;
 }
 
 const errorMessage = (cause: unknown): string => {
@@ -45,7 +45,7 @@ const runBuildStep = async (
       tag: inputs.tag,
       timeout: inputs.timeout,
     });
-    return { conclusion: "success", error: null };
+    return { conclusion: "success" };
   } catch (error) {
     return { conclusion: "failure", error: errorMessage(error) };
   }

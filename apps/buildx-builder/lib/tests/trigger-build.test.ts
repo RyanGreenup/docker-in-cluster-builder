@@ -40,7 +40,7 @@ describe("triggerBuild", () => {
     expect(run.tag).toBe("registry.example.com/app:abc123");
     expect(run.steps).toHaveLength(1);
     expect(run.steps[0]?.conclusion).toBe("success");
-    expect(run.steps[0]?.error).toBeNull();
+    expect(run.steps[0]?.error).toBeUndefined();
     expect(buildImageMock).toHaveBeenCalledWith(
       expect.objectContaining({ contextDir: "/ctx", push: false }),
     );
