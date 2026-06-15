@@ -15,10 +15,25 @@
  * end-to-end type inference you get over the wire. Swap `createRouterClient`
  * for an `RPCLink` later and not a single call site changes.
  *
- * Cross bundling is handled through a plugin in {@link ../../vite.config.ts}
+ * This file is deliberately client-bundled: it lives in `src/demo/` rather than
+ * `src/server/`, so the `server-only-guard` plugin in `vite.config.ts` does not
+ * apply to it. That guard protects the real production path instead: genuine
+ * server code (the `@rs/buildx-builder-api` router, anything under `src/server/`)
+ * may be imported into the UI by `import type` only and can never be bundled
+ * into the browser. The demo can run server-shaped code in-process precisely
+ * because it holds nothing that must stay server-side. The banners below split
+ * the file the way a real app would: a client-safe contract and the server-only
+ * service that would move under `src/server/`.
  */
 import { createRouterClient, ORPCError, os } from '@orpc/server'
 import * as zod from 'zod'
+
+// /////////////////////////////////////////////////////////
+// CLIENT-SAFE (may live anywhere) /////////////////////////
+// /////////////////////////////////////////////////////////
+// The shared contract: constants, schemas, and the derived type. Pure data and
+// validation with no server state, so they are safe in the browser bundle and
+// would normally live in a module imported by both the client and the server.
 
 /** Lowest valid build id; ids count up from here. */
 const FIRST_BUILD_ID = 1
@@ -37,10 +52,16 @@ const BuildSchema = zod.object({
 
 export type Build = zod.infer<typeof BuildSchema>
 
-/**
- * In-memory store standing in for a real build backend. Kept generic and
- * side-effect free on import so this file is safe to pull into the UI bundle.
- */
+// /////////////////////////////////////////////////////////
+// SERVER ONLY src/server/ /////////////////////////////////
+// /////////////////////////////////////////////////////////
+// Stateful store, procedures, router, and the in-process client. In a real app
+// these would live under `src/server/` (or `@rs/buildx-builder-api`) and the UI
+// would reach `router` by `import type` only. The demo keeps them here so the
+// whole service runs in-process in the browser; nothing here touches a secret,
+// the filesystem, or the network, which is the only reason that is safe.
+
+/** In-memory store standing in for a real build backend. */
 const builds: Build[] = []
 let nextId = FIRST_BUILD_ID
 
