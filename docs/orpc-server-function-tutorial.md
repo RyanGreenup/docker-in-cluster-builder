@@ -140,6 +140,14 @@ createServer(async (req, res) => {
 }).listen(3001, "127.0.0.1");
 ```
 
+> [!NOTE]
+> **The handler speaks oRPC's own wire format, which is a format point, not a
+> licensing one.** oRPC is free and open source (MIT [7]); nothing here is locked
+> down. The "own format" caveat is only that the protocol is specific to oRPC (a
+> `{ json, meta }` envelope, not plain JSON or a neutral standard), so call it with
+> `RPCLink`, not a hand-built JSON request. See the wire-format note in
+> [`orpc-solidjs-tutorial.md`](./orpc-solidjs-tutorial.md).
+
 ### 1.3 Consume it from the client (type-only)
 
 A single shared client module. The router is imported as a **type only**, so no
@@ -310,3 +318,4 @@ all, and types are extracted with helpers like `InferContractRouterInputs` /
 4. CORS Plugin - oRPC: https://orpc.dev/docs/plugins/cors
 5. Monorepo Setup - oRPC: https://orpc.dev/docs/best-practices/monorepo-setup
 6. Contract-first, Define Contract - oRPC: https://orpc.dev/docs/contract-first/define-contract
+7. oRPC license (MIT) - unnoq/orpc: https://github.com/unnoq/orpc/blob/main/LICENSE

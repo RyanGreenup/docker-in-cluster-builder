@@ -29,6 +29,14 @@ const client: RouterClient<typeof router> = createORPCClient(link);
 What changes is the link's `url` (same origin instead of `http://127.0.0.1:3001`)
 and which process answers it.
 
+> [!NOTE]
+> **Co-hosting serves oRPC's own wire format; that is a format point, not a
+> licensing one.** oRPC is free and open source (MIT [7]). Whether you host the
+> handler on a second port, behind a `/rpc` prefix, or on a framework route, the
+> bytes on the wire are oRPC's RPC protocol (a `{ json, meta }` envelope, not plain
+> JSON), so clients must use `RPCLink`. If you need a standards-based wire at the
+> same origin, mount oRPC's OpenAPI handler instead of (or beside) the RPC handler.
+
 ## Option 2: one server serves the SPA + `/rpc`
 
 The oRPC Node handler reports whether a request `matched` a procedure; on a miss
@@ -232,3 +240,4 @@ only difference is that the web client becomes same-origin.
 4. Optimize Server-Side Rendering (SSR) - oRPC: https://orpc.dev/docs/best-practices/optimize-ssr
 5. Vite server options (proxy): https://vite.dev/config/server-options
 6. TanStack Start Adapter - oRPC: https://orpc.dev/docs/adapters/tanstack-start
+7. oRPC license (MIT) - unnoq/orpc: https://github.com/unnoq/orpc/blob/main/LICENSE

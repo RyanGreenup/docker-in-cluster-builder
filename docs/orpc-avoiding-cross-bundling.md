@@ -5,6 +5,16 @@ node-only modules) out of the browser bundle when using oRPC, for two layouts:
 a single package and a monorepo. Every claim below is backed by an official oRPC
 source, linked inline and collected at the end.
 
+> [!NOTE]
+> **Why "server code" is the concern here, and not licensing.** oRPC is free and
+> open source (MIT [6]), so keeping it out of the browser bundle is never a
+> licensing matter: it is about not shipping handler implementations, secrets, and
+> node-only modules to clients. Separately, oRPC's wire format is its own (a
+> `{ json, meta }` envelope, not plain JSON), but that is a transport detail
+> handled by `RPCLink` and is orthogonal to the cross-bundling boundary below. See
+> the wire-format note in
+> [`orpc-solidjs-tutorial.md`](./orpc-solidjs-tutorial.md).
+
 ## The core principle (applies to both layouts)
 
 The client never needs the router *value*. A client is built from a transport
@@ -123,3 +133,4 @@ code, by `server-only` [1][2][3][4].
 3. Monorepo Setup - oRPC: https://orpc.dev/docs/best-practices/monorepo-setup
 4. Contract-first, Define Contract - oRPC: https://orpc.dev/docs/contract-first/define-contract
 5. Server and Client Components (Preventing environment poisoning) - Next.js: https://nextjs.org/docs/app/getting-started/server-and-client-components
+6. oRPC license (MIT) - unnoq/orpc: https://github.com/unnoq/orpc/blob/main/LICENSE

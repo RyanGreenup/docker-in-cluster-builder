@@ -107,10 +107,19 @@ server.listen(3001, "127.0.0.1", () =>
 
 ### Key points
 
-- `RPCHandler` speaks oRPC's proprietary RPC protocol over HTTP and is built for
-  `RPCLink`; it does not serve OpenAPI, and you should not craft requests to it by
-  hand [2]. It serializes native types (Date, BigInt, Map, Set, etc.), so the wire
-  format is not plain JSON [2].
+- `RPCHandler` speaks oRPC's own RPC protocol over HTTP (specific to oRPC, not a
+  neutral standard) and is built for `RPCLink`; it does not serve OpenAPI, and you
+  should not craft requests to it by hand [2]. It serializes native types (Date,
+  BigInt, Map, Set, etc.), so the wire format is not plain JSON [2].
+
+> [!NOTE]
+> **"Proprietary" here is a wire-format point, not a licensing one.** oRPC itself
+> is free and open source (MIT licensed [7]), so there is no vendor lock-in: you
+> can read, fork, or reimplement it [6]. What is "proprietary" is only the RPC wire
+> format. It is specific to oRPC (a `{ json, meta }` envelope, not a neutral
+> standard like JSON-RPC or plain JSON), so a generic JSON/HTTP client cannot call
+> it directly; use `RPCLink`. If you need a standards-based wire for third-party or
+> non-TypeScript consumers, expose oRPC's OpenAPI handler instead [2].
 - `CORSPlugin` configures cross-origin requests [3]; in this setup that is needed
   for the Vite dev server (different port) and for cross-origin clients such as
   Capacitor builds.
@@ -338,3 +347,4 @@ import is type-only, this inference carries no server code into the bundle [1].
 3. CORS Plugin - oRPC: https://orpc.dev/docs/plugins/cors
 4. RPC Protocol - oRPC: https://orpc.dev/docs/advanced/rpc-protocol
 5. RPC Link - oRPC: https://orpc.dev/docs/client/rpc-link
+6. oRPC license (MIT) - unnoq/orpc: https://github.com/unnoq/orpc/blob/main/LICENSE
