@@ -24,25 +24,41 @@ export interface BuildOptions {
 }
 
 /**
- * Build a docker image with buildx, streaming logs and enforcing a timeout.
+ * Translate build options into a `docker buildx build` argument list.
  * @param opts - Build configuration: context, tag, and optional behaviour.
+ * @returns The ordered argv passed to docker.
  */
-export const buildImage = (opts: BuildOptions): Promise<void> => {
-  const { timeout = DEFAULT_TIMEOUT_MS } = opts;
+const toBuildxArgs = (opts: BuildOptions): string[] => {
   const args = ["buildx", "build", "--progress=plain", "--tag", opts.tag];
 
   if (opts.dockerfile) {
     args.push("--file", opts.dockerfile);
   }
   if (opts.cacheRef) {
-    args.push("--cache-from", `type=registry,ref=${opts.cacheRef}`);
-    args.push("--cache-to", `type=registry,ref=${opts.cacheRef},mode=max`);
+    args.push(
+      "--cache-from",
+      `type=registry,ref=${opts.cacheRef}`,
+      "--cache-to",
+      `type=registry,ref=${opts.cacheRef},mode=max`,
+    );
   }
   let loadOrPush = "--load";
   if (opts.push) {
     loadOrPush = "--push";
   }
   args.push(loadOrPush, opts.contextDir);
+
+  return args;
+};
+
+/**
+ * Build a docker image with buildx, streaming logs and enforcing a timeout.
+ * @param opts - Build configuration: context, tag, and optional behaviour.
+ * @returns A promise that resolves when the build succeeds.
+ */
+export const buildImage = (opts: BuildOptions): Promise<void> => {
+  const { timeout = DEFAULT_TIMEOUT_MS } = opts;
+  const args = toBuildxArgs(opts);
 
   return new Promise((resolve, reject) => {
     const proc = spawn("docker", args, { stdio: ["ignore", "pipe", "pipe"] });
