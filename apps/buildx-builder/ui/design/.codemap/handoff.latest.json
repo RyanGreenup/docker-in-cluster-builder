@@ -1,0 +1,360 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-06-09T22:21:00.381651139+10:00",
+  "root": "/var/home/ryan/Sync/journals/2026/03/25/kubernetes-3/apps/personal/website/design",
+  "branch": "main",
+  "base_ref": "origin/main",
+  "prefix": {
+    "file_count": 37,
+    "hubs": []
+  },
+  "delta": {
+    "changed": [
+      {
+        "path": "apps/personal/website/design/oxlint.config.ts",
+        "status": "modified"
+      },
+      {
+        "path": "apps/personal/website/design/package.json",
+        "status": "modified"
+      },
+      {
+        "path": "apps/personal/website/design/src/global.css",
+        "status": "modified"
+      },
+      {
+        "path": "apps/personal/website/design/src/index.ts",
+        "status": "branch"
+      },
+      {
+        "path": "apps/personal/website/design/src/palette/design-token-examples.md",
+        "status": "branch"
+      },
+      {
+        "path": "apps/personal/website/design/src/palette/index.ts",
+        "status": "branch"
+      },
+      {
+        "path": "apps/personal/website/design/src/palette/primitives.ts",
+        "status": "branch"
+      },
+      {
+        "path": "apps/personal/website/design/src/palette/roles.ts",
+        "status": "branch"
+      },
+      {
+        "path": "apps/personal/website/design/src/palette/status.ts",
+        "status": "branch"
+      },
+      {
+        "path": "apps/personal/website/design/src/recipes/approve-reject.css.ts",
+        "status": "modified"
+      },
+      {
+        "path": "apps/personal/website/design/src/recipes/auth-form.css.ts",
+        "status": "modified"
+      },
+      {
+        "path": "apps/personal/website/design/src/recipes/auth-layout.css.ts",
+        "status": "modified"
+      },
+      {
+        "path": "apps/personal/website/design/src/recipes/auto-grid.css.ts",
+        "status": "modified"
+      },
+      {
+        "path": "apps/personal/website/design/src/recipes/badge.css.ts",
+        "status": "branch"
+      },
+      {
+        "path": "apps/personal/website/design/src/recipes/brand-logo.css.ts",
+        "status": "modified"
+      },
+      {
+        "path": "apps/personal/website/design/src/recipes/brand-panel.css.ts",
+        "status": "modified"
+      },
+      {
+        "path": "apps/personal/website/design/src/recipes/button.css.ts",
+        "status": "modified"
+      },
+      {
+        "path": "apps/personal/website/design/src/recipes/card.css.ts",
+        "status": "branch"
+      },
+      {
+        "path": "apps/personal/website/design/src/recipes/checklist.css.ts",
+        "status": "modified"
+      },
+      {
+        "path": "apps/personal/website/design/src/recipes/customer-table.css.ts",
+        "status": "modified"
+      },
+      {
+        "path": "apps/personal/website/design/src/recipes/data-table.css.ts",
+        "status": "modified"
+      },
+      {
+        "path": "apps/personal/website/design/src/recipes/field.css.ts",
+        "status": "branch"
+      },
+      {
+        "path": "apps/personal/website/design/src/recipes/flag.css.ts",
+        "status": "modified"
+      },
+      {
+        "path": "apps/personal/website/design/src/recipes/index.ts",
+        "status": "modified"
+      },
+      {
+        "path": "apps/personal/website/design/src/recipes/kv.css.ts",
+        "status": "modified"
+      },
+      {
+        "path": "apps/personal/website/design/src/recipes/layout.css.ts",
+        "status": "modified"
+      },
+      {
+        "path": "apps/personal/website/design/src/recipes/mini-row.css.ts",
+        "status": "modified"
+      },
+      {
+        "path": "apps/personal/website/design/src/recipes/quote-card.css.ts",
+        "status": "modified"
+      },
+      {
+        "path": "apps/personal/website/design/src/recipes/rate-chart.css.ts",
+        "status": "modified"
+      },
+      {
+        "path": "apps/personal/website/design/src/recipes/selector.css.ts",
+        "status": "modified"
+      },
+      {
+        "path": "apps/personal/website/design/src/recipes/split-grid.css.ts",
+        "status": "modified"
+      },
+      {
+        "path": "apps/personal/website/design/src/recipes/stat-bar.css.ts",
+        "status": "modified"
+      },
+      {
+        "path": "apps/personal/website/design/src/recipes/stat.css.ts",
+        "status": "modified"
+      },
+      {
+        "path": "apps/personal/website/design/src/recipes/table.css.ts",
+        "status": "modified"
+      },
+      {
+        "path": "apps/personal/website/design/src/recipes/toast.css.ts",
+        "status": "modified"
+      },
+      {
+        "path": "apps/personal/website/design/src/recipes/tracker.css.ts",
+        "status": "modified"
+      },
+      {
+        "path": "apps/personal/website/design/src/recipes/upload.css.ts",
+        "status": "modified"
+      },
+      {
+        "path": "apps/personal/website/design/src/recipes/who.css.ts",
+        "status": "modified"
+      },
+      {
+        "path": "apps/personal/website/design/src/sprinkles.css.ts",
+        "status": "branch"
+      },
+      {
+        "path": "apps/personal/website/design/src/theme.css.ts",
+        "status": "branch"
+      },
+      {
+        "path": "apps/personal/website/design/src/tokens.ts",
+        "status": "modified"
+      },
+      {
+        "path": "apps/personal/website/design/tsconfig.json",
+        "status": "modified"
+      },
+      {
+        "path": "docs/superpowers/plans/2026-06-09-authelia-workspace-package.md",
+        "status": "branch"
+      },
+      {
+        "path": "docs/superpowers/specs/2026-06-09-authelia-workspace-package-design.md",
+        "status": "branch"
+      },
+      {
+        "path": "packages/k8s-generator/apps/authelia/.gitignore",
+        "status": "branch"
+      },
+      {
+        "path": "packages/k8s-generator/apps/authelia/package.json",
+        "status": "branch"
+      },
+      {
+        "path": "packages/k8s-generator/apps/authelia/src/builders/configmap.ts",
+        "status": "branch"
+      },
+      {
+        "path": "packages/k8s-generator/apps/authelia/src/builders/labels.ts",
+        "status": "branch"
+      },
+      {
+        "path": "packages/k8s-generator/apps/authelia/src/builders/middleware.ts",
+        "status": "branch"
+      },
+      {
+        "path": "packages/k8s-generator/apps/authelia/src/builders/namespace.ts",
+        "status": "branch"
+      },
+      {
+        "path": "packages/k8s-generator/apps/authelia/src/builders/network-policy.ts",
+        "status": "branch"
+      },
+      {
+        "path": "packages/k8s-generator/apps/authelia/src/builders/pvc.ts",
+        "status": "branch"
+      },
+      {
+        "path": "packages/k8s-generator/apps/authelia/src/builders/secret-names.ts",
+        "status": "branch"
+      },
+      {
+        "path": "packages/k8s-generator/apps/authelia/src/builders/secrets.ts",
+        "status": "branch"
+      },
+      {
+        "path": "packages/k8s-generator/apps/authelia/src/builders/service.ts",
+        "status": "branch"
+      },
+      {
+        "path": "packages/k8s-generator/apps/authelia/src/builders/serviceaccount.ts",
+        "status": "branch"
+      },
+      {
+        "path": "packages/k8s-generator/apps/authelia/src/builders/statefulset-parts.ts",
+        "status": "branch"
+      },
+      {
+        "path": "packages/k8s-generator/apps/authelia/src/builders/statefulset.ts",
+        "status": "branch"
+      },
+      {
+        "path": "packages/k8s-generator/apps/authelia/src/config-static.ts",
+        "status": "branch"
+      },
+      {
+        "path": "packages/k8s-generator/apps/authelia/src/config-yaml.ts",
+        "status": "branch"
+      }
+    ],
+    "risk_files": [],
+    "recent_events": [],
+    "next_steps": [
+      "Run tests covering changed files before handoff."
+    ],
+    "open_questions": [
+      "Live watch state was unavailable; timeline may be incomplete.",
+      "Dependency graph context was unavailable; risk files may be incomplete."
+    ]
+  },
+  "prefix_hash": "45681a2ca3fc8bfd6a079059fa64e22017cb9968dcf1af3cce24ff84c9b8ceaf",
+  "delta_hash": "d9670d5f91043d880aa356347053a8d6334f1771cbc55aca248e712529aad965",
+  "combined_hash": "bc1f40733f63fe88b9682999c629f317bb5b3d6d3fd3761bf3f8006dd6360cfb",
+  "metrics": {
+    "prefix_bytes": 27,
+    "delta_bytes": 5450,
+    "total_bytes": 5477,
+    "unchanged_bytes": 5450,
+    "reuse_ratio": 0.9950702939565456,
+    "prefix_reused": false,
+    "delta_reused": true,
+    "previous_combined_hash": "bfd8b6488a4891bb2a491652909484e484df668c26f89f45ddcac2731ea23184"
+  },
+  "agent_history": [
+    {
+      "agent_id": "claude-code",
+      "started_at": "2026-06-09T21:58:15.195659754+10:00",
+      "ended_at": "2026-06-09T21:58:15.195659784+10:00"
+    },
+    {
+      "agent_id": "claude-code",
+      "started_at": "2026-06-09T22:21:00.381653804+10:00",
+      "ended_at": "2026-06-09T22:21:00.381653834+10:00"
+    }
+  ],
+  "changed_files": [
+    "apps/personal/website/design/oxlint.config.ts",
+    "apps/personal/website/design/package.json",
+    "apps/personal/website/design/src/global.css",
+    "apps/personal/website/design/src/index.ts",
+    "apps/personal/website/design/src/palette/design-token-examples.md",
+    "apps/personal/website/design/src/palette/index.ts",
+    "apps/personal/website/design/src/palette/primitives.ts",
+    "apps/personal/website/design/src/palette/roles.ts",
+    "apps/personal/website/design/src/palette/status.ts",
+    "apps/personal/website/design/src/recipes/approve-reject.css.ts",
+    "apps/personal/website/design/src/recipes/auth-form.css.ts",
+    "apps/personal/website/design/src/recipes/auth-layout.css.ts",
+    "apps/personal/website/design/src/recipes/auto-grid.css.ts",
+    "apps/personal/website/design/src/recipes/badge.css.ts",
+    "apps/personal/website/design/src/recipes/brand-logo.css.ts",
+    "apps/personal/website/design/src/recipes/brand-panel.css.ts",
+    "apps/personal/website/design/src/recipes/button.css.ts",
+    "apps/personal/website/design/src/recipes/card.css.ts",
+    "apps/personal/website/design/src/recipes/checklist.css.ts",
+    "apps/personal/website/design/src/recipes/customer-table.css.ts",
+    "apps/personal/website/design/src/recipes/data-table.css.ts",
+    "apps/personal/website/design/src/recipes/field.css.ts",
+    "apps/personal/website/design/src/recipes/flag.css.ts",
+    "apps/personal/website/design/src/recipes/index.ts",
+    "apps/personal/website/design/src/recipes/kv.css.ts",
+    "apps/personal/website/design/src/recipes/layout.css.ts",
+    "apps/personal/website/design/src/recipes/mini-row.css.ts",
+    "apps/personal/website/design/src/recipes/quote-card.css.ts",
+    "apps/personal/website/design/src/recipes/rate-chart.css.ts",
+    "apps/personal/website/design/src/recipes/selector.css.ts",
+    "apps/personal/website/design/src/recipes/split-grid.css.ts",
+    "apps/personal/website/design/src/recipes/stat-bar.css.ts",
+    "apps/personal/website/design/src/recipes/stat.css.ts",
+    "apps/personal/website/design/src/recipes/table.css.ts",
+    "apps/personal/website/design/src/recipes/toast.css.ts",
+    "apps/personal/website/design/src/recipes/tracker.css.ts",
+    "apps/personal/website/design/src/recipes/upload.css.ts",
+    "apps/personal/website/design/src/recipes/who.css.ts",
+    "apps/personal/website/design/src/sprinkles.css.ts",
+    "apps/personal/website/design/src/theme.css.ts",
+    "apps/personal/website/design/src/tokens.ts",
+    "apps/personal/website/design/tsconfig.json",
+    "docs/superpowers/plans/2026-06-09-authelia-workspace-package.md",
+    "docs/superpowers/specs/2026-06-09-authelia-workspace-package-design.md",
+    "packages/k8s-generator/apps/authelia/.gitignore",
+    "packages/k8s-generator/apps/authelia/package.json",
+    "packages/k8s-generator/apps/authelia/src/builders/configmap.ts",
+    "packages/k8s-generator/apps/authelia/src/builders/labels.ts",
+    "packages/k8s-generator/apps/authelia/src/builders/middleware.ts",
+    "packages/k8s-generator/apps/authelia/src/builders/namespace.ts",
+    "packages/k8s-generator/apps/authelia/src/builders/network-policy.ts",
+    "packages/k8s-generator/apps/authelia/src/builders/pvc.ts",
+    "packages/k8s-generator/apps/authelia/src/builders/secret-names.ts",
+    "packages/k8s-generator/apps/authelia/src/builders/secrets.ts",
+    "packages/k8s-generator/apps/authelia/src/builders/service.ts",
+    "packages/k8s-generator/apps/authelia/src/builders/serviceaccount.ts",
+    "packages/k8s-generator/apps/authelia/src/builders/statefulset-parts.ts",
+    "packages/k8s-generator/apps/authelia/src/builders/statefulset.ts",
+    "packages/k8s-generator/apps/authelia/src/config-static.ts",
+    "packages/k8s-generator/apps/authelia/src/config-yaml.ts"
+  ],
+  "risk_files": [],
+  "recent_events": [],
+  "next_steps": [
+    "Run tests covering changed files before handoff."
+  ],
+  "open_questions": [
+    "Live watch state was unavailable; timeline may be incomplete.",
+    "Dependency graph context was unavailable; risk files may be incomplete."
+  ]
+}
