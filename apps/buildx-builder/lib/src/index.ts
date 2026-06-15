@@ -6,19 +6,15 @@ export interface FormatMessageInput {
 }
 
 /**
- * Build a friendly greeting for the given name.
- * @param root0 - The message fields.
- * @param root0.name - Name to greet.
- * @param root0.punctuation - Trailing punctuation (defaults to "!").
- * @returns The formatted greeting.
+ * @param root0
+ * @param root0.name
+ * @param root0.punctuation
  */
 export const formatMessage = ({ name, punctuation = "!" }: FormatMessageInput): string =>
   `Hello, ${name}${punctuation}`;
 
 /**
- * Add two numbers.
- * @param left - The left operand.
- * @param right - The right operand.
- * @returns The sum of the operands.
+ * @param left
+ * @param right
  */
 export const add = (left: number, right: number): number => left + right;
