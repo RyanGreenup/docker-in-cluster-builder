@@ -1,4 +1,0 @@
-{
-  "extends": "@rs/typescript-config/storybook.json",
-  "include": ["src", ".storybook"]
-}
