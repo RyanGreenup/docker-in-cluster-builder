@@ -1,3 +1,4 @@
+export * from "./api";
 export { buildImage } from "./buildx/build";
 
 export interface FormatMessageInput {
