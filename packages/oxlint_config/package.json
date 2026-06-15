@@ -16,11 +16,11 @@
     "oxlint-tsgolint": "^0.23.0"
   },
   "devDependencies": {
-    "eslint": "^9.20.0",
+    "eslint": "^9.39.4",
     "eslint-plugin-jsdoc": "^50.8.0",
     "eslint-plugin-solid": "^0.14.5",
     "eslint-plugin-sonarjs": "^4.0.3",
-    "eslint-plugin-turbo": "^2.7.1",
+    "eslint-plugin-turbo": "^2.9.18",
     "oxfmt": "^0.51.0",
     "oxlint": "1.61.0"
   }

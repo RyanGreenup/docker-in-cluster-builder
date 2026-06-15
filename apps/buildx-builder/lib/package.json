@@ -26,15 +26,18 @@
     "release": "bumpp",
     "prepublishOnly": "pnpm run build"
   },
+  "dependencies": {
+    "zod": "^4.4.3"
+  },
   "devDependencies": {
     "@rs/oxlint-config": "workspace:*",
-    "@types/node": "^25.9.1",
-    "@typescript/native-preview": "^7.0.0-dev.20260524.1",
+    "@types/node": "^25.9.3",
+    "@typescript/native-preview": "^7.0.0-dev.20260614.1",
     "@vitest/coverage-v8": "4.1.7",
     "bumpp": "^11.1.0",
     "oxfmt": "^0.51.0",
     "oxlint": "1.61.0",
-    "tsdown": "^0.22.0",
+    "tsdown": "^0.22.2",
     "typescript": "^6.0.3",
     "vitest": "4.1.7"
   }
