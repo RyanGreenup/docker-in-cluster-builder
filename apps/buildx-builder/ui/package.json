@@ -13,6 +13,7 @@
     "check": "prettier --check ."
   },
   "dependencies": {
+    "@rs/layout": "^0.0.0",
     "@rs/ryan-personal-website-design": "^0.0.1",
     "@tanstack/router-plugin": "^1.133.21",
     "@tanstack/solid-router": "latest",
@@ -22,6 +23,7 @@
     "solid-js": "^1.9.12"
   },
   "devDependencies": {
+    "@rs/eslint-config": "workspace:*",
     "@solidjs/testing-library": "^0.8.10",
     "@tanstack/devtools-vite": "latest",
     "@tanstack/eslint-config": "^0.3.4",

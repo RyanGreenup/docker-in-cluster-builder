@@ -1,0 +1,26 @@
+{
+  "name": "@rs/eslint-config",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "echo 'No checks configured'"
+  },
+  "exports": {
+    "./base": "./base.js",
+    "./solid-js": "./solid-js.js"
+  },
+  "dependencies": {
+    "eslint-plugin-jsdoc": "^50.8.0",
+    "eslint-plugin-solid": "^0.14.5",
+    "eslint-plugin-sonarjs": "^4.0.3",
+    "eslint-plugin-turbo": "^2.7.1",
+    "eslint-plugin-unicorn": "^60.0.0"
+  },
+  "peerDependencies": {
+    "eslint": "^9.20.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.20.0"
+  }
+}

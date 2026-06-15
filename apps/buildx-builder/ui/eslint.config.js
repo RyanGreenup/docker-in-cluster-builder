@@ -1,9 +1,11 @@
 //  @ts-check
 
 import { tanstackConfig } from "@tanstack/eslint-config";
+import solidConfig from "@rs/eslint-config/solid-js";
 
 export default [
   ...tanstackConfig,
+  ...solidConfig,
   {
     rules: {
       "import/no-cycle": "off",
@@ -11,10 +13,11 @@ export default [
       "sort-imports": "off",
       "@typescript-eslint/array-type": "off",
       "@typescript-eslint/require-await": "off",
-      "pnpm/json-enforce-catalog": "off",
     },
   },
   {
-    ignores: ["eslint.config.js", "prettier.config.js"],
+    // design/ is a self-contained vendored package with its own lint config and
+    // a tsconfig that extends a base not installed in this workspace.
+    ignores: ["eslint.config.js", "prettier.config.js", "src/routeTree.gen.ts", "design/**"],
   },
 ];
