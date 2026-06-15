@@ -2,6 +2,11 @@
 
 A pnpm workspace template for a Solid SPA backed by a Node oRPC API.
 
+> [!NOTE]
+> Some packages are imported from our local npm registry (kubernetes-3)
+> via .npmrc.
+
+
 ## Packages
 
 - `apps/api` exports the oRPC router and runs the HTTP API on port `3001`.
