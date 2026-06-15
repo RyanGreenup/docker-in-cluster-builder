@@ -13,12 +13,10 @@
     "check": "prettier --check ."
   },
   "dependencies": {
-    "@tailwindcss/vite": "^4.1.18",
     "@tanstack/router-plugin": "^1.133.21",
     "@tanstack/solid-router": "latest",
     "@tanstack/solid-router-devtools": "latest",
-    "solid-js": "^1.9.12",
-    "tailwindcss": "^4.1.18"
+    "solid-js": "^1.9.12"
   },
   "devDependencies": {
     "@solidjs/testing-library": "^0.8.10",
@@ -41,3 +39,4 @@
     ]
   }
 }
+
