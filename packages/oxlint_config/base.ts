@@ -5,6 +5,7 @@ export const baseConfig = defineConfig({
   jsPlugins: [
     { name: "jsdoc-js", specifier: "eslint-plugin-jsdoc" },
     { name: "turbo", specifier: "eslint-plugin-turbo" },
+    /** { name: "eslint-perfectionist", specifier: "eslint-plugin-perfectionist" }, */
   ],
   categories: {
     correctness: "error",
@@ -15,18 +16,20 @@ export const baseConfig = defineConfig({
   },
 
   rules: {
-    // TurboRepo Stuff
+    /** TurboRepo Stuff */
     "turbo/no-undeclared-env-vars": "error",
 
-    // --- Strict public API documentation ---
+    /** --- Strict public API documentation --- */
     "jsdoc-js/check-access": "error",
     "jsdoc-js/check-alignment": "error",
     "jsdoc-js/check-param-names": "error",
     "jsdoc-js/check-property-names": "error",
-    // `typed: true` validates against the JSDoc tag vocabulary, which omits
-    // TSDoc-only block tags. `definedTags` re-admits the TSDoc tags
-    // (`@remarks`, `@typeParam`, etc.) so they are not flagged as
-    // "invalid JSDoc tag name".
+    /**
+     * `typed: true` validates against the JSDoc tag vocabulary, which omits
+     * TSDoc-only block tags. `definedTags` re-admits the TSDoc tags
+     * (`@remarks`, `@typeParam`, etc.) so they are not flagged as
+     * "invalid JSDoc tag name".
+     */
     "jsdoc-js/check-tag-names": [
       "error",
       { typed: true, definedTags: ["remarks", "privateRemarks", "typeParam", "defaultValue"] },
@@ -40,9 +43,11 @@ export const baseConfig = defineConfig({
     "jsdoc-js/no-defaults": "error",
     "jsdoc-js/no-types": "error",
     "jsdoc-js/require-description": ["error", { contexts: ["any"] }],
-    // Off: the autofix double-punctuates (`0.3.1.` -> `0.3.1..`) and fights
-    // TSDoc prose containing inline code, `{@link}` tags, and version numbers.
-    // `eslint/capitalized-comments` still keeps sentence-initial capitals.
+    /**
+     * Off: the autofix double-punctuates (`0.3.1.` -> `0.3.1..`) and fights
+     * TSDoc prose containing inline code, `{@link}` tags, and version numbers.
+     * `eslint/capitalized-comments` still keeps sentence-initial capitals.
+     */
     "jsdoc-js/require-description-complete-sentence": "off",
     "jsdoc-js/require-jsdoc": [
       "error",
@@ -67,16 +72,20 @@ export const baseConfig = defineConfig({
 
     /** Import ordering is owned by oxfmt; disabled to avoid fighting its sort. */
     "sort-imports": "off",
-    // --- Style limits --- (
-    // NOTE these are the default for the style category
-    // explicit to avoid regressions etc.
+    /**
+     * --- Style limits ---
+     * NOTE these are the default for the style category
+     * explicit to avoid regressions etc.
+     */
     "max-lines": ["error", { max: 300 }],
     "max-lines-per-function": ["error", { max: 50 }],
     "max-params": ["error", { max: 3 }],
 
-    // --- TypeScript strict safety ---
-    // Worth it for own code; expect type assertions at third-party library boundaries
-    // where packages (especially newer solid-primitives modules) have weak typings
+    /**
+     * --- TypeScript strict safety ---
+     * Worth it for own code; expect type assertions at third-party library boundaries
+     * where packages (especially newer solid-primitives modules) have weak typings
+     */
     "typescript/no-explicit-any": "error",
     "typescript/no-unsafe-assignment": "error",
     "typescript/no-unsafe-call": "error",
@@ -84,34 +93,45 @@ export const baseConfig = defineConfig({
     "typescript/no-unsafe-return": "error",
     "typescript/no-unsafe-argument": "error",
 
-    // --- Async correctness ---
-    // Valuable; use `void fetchData()` for intentional fire-and-forget in createEffect
+    /**
+     * --- Async correctness ---
+     * Valuable; use `void fetchData()` for intentional fire-and-forget in createEffect
+     */
     "typescript/no-floating-promises": "error",
     "typescript/await-thenable": "error",
-    // checksVoidReturn.attributes=false: without it, every onClick={async () => ...} flags
+    /** checksVoidReturn.attributes=false: without it, every onClick={async () => ...} flags */
     "typescript/no-misused-promises": [
       "error",
       { checksVoidReturn: { attributes: false } },
     ],
 
-    // --- Type hygiene ---
+    /** --- Type hygiene --- */
     "typescript/consistent-type-imports": "error",
     "typescript/consistent-type-exports": "error",
-    // Warn-only in .tsx would be defensible — Solid props often have wider runtime
-    // types than TS believes, so removing "unnecessary" defensive checks can introduce
-    // real bugs. Keep error for now; add a .tsx override if it becomes noisy.
+    /**
+     * Warn-only in .tsx would be defensible, since Solid props often have wider
+     * runtime types than TS believes, so removing "unnecessary" defensive checks
+     * can introduce real bugs. Keep error for now; add a .tsx override if it
+     * becomes noisy.
+     */
     "typescript/no-unnecessary-condition": "error",
     "typescript/prefer-nullish-coalescing": "error",
-    // `!` assertions in Solid frequently mask "signal not resolved yet" bugs;
-    // the correct pattern is `<Show when={x}>{(val) => ...}</Show>`.
+    /**
+     * `!` assertions in Solid frequently mask "signal not resolved yet" bugs;
+     * the correct pattern is `<Show when={x}>{(val) => ...}</Show>`.
+     */
     "typescript/no-non-null-assertion": "error",
-    // Catches `{count && <X/>}` rendering `0` as text, and interpolating
-    // non-strings into template literals. Junior-hostile for a week, then the
-    // bugs stop.
+    /**
+     * Catches `{count && <X/>}` rendering `0` as text, and interpolating
+     * non-strings into template literals. Junior-hostile for a week, then the
+     * bugs stop.
+     */
     "typescript/strict-boolean-expressions": "error",
-    // allowNumber: signal getters returning numbers are used in template literals
-    // constantly (`${count()}`). Without it this fires all day on valid code.
-    // Still catches interpolating objects, which is the real bug.
+    /**
+     * allowNumber: signal getters returning numbers are used in template literals
+     * constantly (`${count()}`). Without it this fires all day on valid code.
+     * Still catches interpolating objects, which is the real bug.
+     */
     "typescript/restrict-template-expressions": [
       "error",
       { allowNumber: true },
@@ -124,8 +144,58 @@ export const baseConfig = defineConfig({
       },
     ],
 
-    // This is 80% of the prefer-readonly-parameter-types
-    // without the noise
-    "no-param-reassign": "error",
+    /**
+     * Solid uses () => {} idiomatically, however `function` forward declares
+     * allowing a nice top down read. Hence we explicitly allow both for
+     * conventional solid-js with arrow functions that *feel* like lambdas and
+     * functions to get forward declaration.
+     *
+     * Just disable it and move on.
+     *
+     */
+    "eslint/func-style": [
+      "error",
+      "declaration",
+      { allowArrowFunctions: true },
+    ],
   },
+  overrides: [
+    {
+      files: ["**/*.test.ts"],
+      rules: {
+        /** max-statements more generous for tests (set up a bunch of things etc.) */
+        "max-statements": ["error", 15],
+      },
+    },
+    {
+      /** Vanilla-extract: token and sprinkles files are legitimately long data declarations.
+       All TypeScript safety rules remain strict; CSS correctness is VE's type system's job.
+       Remove this override if the project has no vanilla-extract .css.ts files. */
+      files: ["**/*.css.ts"],
+      rules: {
+        "max-lines": ["error", { max: 500 }],
+        /** zIndex as a bare integer (zIndex: 10) is standard CSS practice */
+        "no-magic-numbers": [
+          "error",
+          {
+            ignore: [0, 1, 2, 10, 100],
+            ignoreTypeIndexes: true,
+            ignoreReadOnlyClassProperties: true,
+            ignoreNumericLiteralTypes: true,
+            ignoreEnums: true,
+            ignoreDefaultValues: true,
+          },
+        ],
+
+        /** CSS has numbers as keys, making this frustrating  */
+        "eslint/sort-keys": "off",
+        /** Genuinely usefuful for css */
+        "eslint/no-inline-comments": "off",
+        /** Comments starting with numbers is common in css */
+        "eslint/capitalized-comments": "off",
+        /** Vanilla Extract types require `Type` not `Interface` */
+        "typescript/consistent-type-definitions": "off",
+      },
+    },
+  ],
 });

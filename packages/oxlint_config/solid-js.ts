@@ -1,5 +1,5 @@
 import { defineConfig } from "oxlint";
-import { baseConfig } from "./base";
+import { baseConfig } from "@impress/oxlint-config/base";
 
 export default defineConfig({
   extends: [baseConfig],
@@ -9,6 +9,30 @@ export default defineConfig({
     { name: "sonarjs", specifier: "eslint-plugin-sonarjs" },
   ],
   rules: {
+    /**
+     * Solid Conventions
+     * Ternaries, often a map or if/else IS better and clearer, however, I find myself
+     * fighting this a little bit too much and sometimes a map is less clear, consider e.g.:
+     *
+     * ```ts
+     * const toggle = (): void => {
+     *   setMode((current) => (current === 'login' ? 'register' : 'login'))
+     * }
+     * ```
+     *
+     * ```ts
+     *   const nextModeByMode: Record<AuthMode, AuthMode> = {
+     *     login: 'register',
+     *     register: 'login',
+     *   }
+     *   const toggle = (): void => {
+     *     setMode((current) => nextModeByMode[current])
+     *   }
+     * ```
+     */
+    "eslint/no-ternary": "off",
+    "eslint/no-unneeded-ternary": "error",
+
     // --- SolidJS reactivity (via jsPlugins) ---
     // Core: catches broken reactivity, the #1 SolidJS footgun
     "solid/reactivity": "error",
@@ -100,11 +124,6 @@ export default defineConfig({
     // HTMLElement), and store produce() drafts are all mutable by design. Enabling requires
     // a large DOM-type allowlist and would conflict with the no-eslint-disable rule.
     // Revisit if oxlint adds per-type ignores that cover SolidJS reactive patterns.
-    // TODO
-    // Consider scoping this to the actual things it benefits either allow or deny or whatever
-    // the docs make an arg for it in places.
-    // https://typescript-eslint.io/rules/prefer-readonly-parameter-types/
-    // https://oxc.rs/docs/guide/usage/linter/rules/typescript/prefer-readonly-parameter-types.html
     "typescript/prefer-readonly-parameter-types": "off",
 
     // --- Tier 3: rules that fight Solid's grain (explicitly disabled) ---
@@ -144,17 +163,6 @@ export default defineConfig({
     //   general/no-useless-assignment   — enabled automatically via correctness category
   },
   overrides: [
-    {
-      // Vanilla-extract: token and sprinkles files are legitimately long data declarations.
-      // All TypeScript safety rules remain strict — CSS correctness is VE's type system's job.
-      // Remove this override if the project has no vanilla-extract .css.ts files.
-      files: ["**/*.css.ts"],
-      rules: {
-        "max-lines": ["error", { max: 500 }],
-        // zIndex as a bare integer (zIndex: 10) is standard CSS practice
-        "no-magic-numbers": ["error", { ignore: [0, 1, 2, 10, 100] }],
-      },
-    },
     {
       // Test files: literals in assertions are specifications, not magic numbers.
       // max-lines-per-function stays at 50 — small it() blocks self-document expected behavior.
