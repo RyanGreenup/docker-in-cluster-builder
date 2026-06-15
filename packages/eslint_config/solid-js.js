@@ -5,7 +5,7 @@ import { baseConfig } from "./base.js";
 
 /**
  * SolidJS ESLint overlay, an approximate parity port of
- * `@rs/oxlint-config/solid-js`. Extends {@link baseConfig} with SolidJS
+ * `@template/oxlint-config/solid-js`. Extends {@link baseConfig} with SolidJS
  * reactivity rules, a few unicorn/eslint tweaks, the pragmatic disables that
  * keep the rule set quiet on idiomatic Solid code, and file-scoped overrides.
  *

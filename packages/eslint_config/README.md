@@ -1,7 +1,7 @@
-# @rs/eslint-config
+# @template/eslint-config
 
 Shared ESLint flat-config **overlay** for the workspace. It is an approximate
-parity port of `@rs/oxlint-config` (`base` and `solid-js`) for packages that lint
+parity port of `@template/oxlint-config` (`base` and `solid-js`) for packages that lint
 with ESLint instead of oxlint.
 
 ## Usage
@@ -12,7 +12,7 @@ This package is an overlay, not a standalone config. Spread it AFTER
 ```js
 // eslint.config.js
 import { tanstackConfig } from "@tanstack/eslint-config";
-import solidConfig from "@rs/eslint-config/solid-js";
+import solidConfig from "@template/eslint-config/solid-js";
 
 export default [
   ...tanstackConfig,

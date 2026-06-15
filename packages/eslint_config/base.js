@@ -4,7 +4,7 @@ import turbo from "eslint-plugin-turbo";
 import unicorn from "eslint-plugin-unicorn";
 
 /**
- * Base ESLint overlay, an approximate parity port of `@rs/oxlint-config/base`.
+ * Base ESLint overlay, an approximate parity port of `@template/oxlint-config/base`.
  *
  * This is an overlay, not a standalone config: it is meant to be spread AFTER
  * `@tanstack/eslint-config`, which registers the `@typescript-eslint` plugin and

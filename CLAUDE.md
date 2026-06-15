@@ -1,35 +1,31 @@
-# buildx-builder - Project Conventions
+# Full-Stack oRPC Template - Project Conventions
 
 ## Stack
 
-- Runtime target: Node.js-compatible ESM built from TypeScript.
 - Package manager: pnpm workspaces.
-- Build: `tsdown`.
-- CLI framework: `citty`.
+- Web: Vite, Solid, TanStack Router.
+- API: Node HTTP server with oRPC.
+- Build: `tsdown` for the API, Vite for the web app.
 - Tests: `vitest`.
 - Type checking: `tsgo --skipLibCheck --noEmit`.
-- Lint/format: `oxlint` and `oxfmt`.
+- Lint/format: `oxlint`, `oxfmt`, ESLint, and Prettier.
 
-## Project structure
+## Project Structure
 
 ```text
-buildx-builder/
-├── apps/buildx-builder/lib/      # reusable library package
-├── apps/buildx-builder/cli/      # executable CLI package
-└── packages/oxlint_config/
+fullstack-orpc-template/
+├── apps/api/       # oRPC procedures, router, and HTTP server
+├── apps/web/       # Solid SPA and typed oRPC client
+└── packages/       # shared lint and formatting config
 ```
 
 ## Boundaries
 
-- Keep reusable behavior in `lib`.
-- Keep CLI argument parsing and process-facing behavior in `cli`.
-- The CLI may depend on the library; the library must not depend on the CLI.
-- Keep placeholder/example functions generic until real domain behavior is added.
+- Keep procedure handlers and Node-only code in `apps/api`.
+- The web app may import API exports as types only.
+- The web app talks to the API through `RPCLink` at `/rpc`.
+- Add new server-only packages to `serverOnlyGuard` in `apps/web/vite.config.ts`.
 
 ## Verification
 
-Run `pnpm run check` after code changes. For CLI wiring changes, also run:
-
-```sh
-pnpm --dir apps/buildx-builder/cli run test:e2e
-```
+Run `pnpm run check` after code changes.

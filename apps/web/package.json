@@ -1,0 +1,39 @@
+{
+  "name": "@template/web",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev --port 3000",
+    "generate-routes": "tsr generate",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run --passWithNoTests",
+    "lint": "eslint",
+    "format": "prettier --write . && eslint --fix",
+    "check": "prettier --check ."
+  },
+  "dependencies": {
+    "@orpc/client": "^1.14.6",
+    "@orpc/server": "^1.14.6",
+    "@template/api": "workspace:*",
+    "@tanstack/solid-router": "^1.170.15",
+    "@tanstack/solid-router-devtools": "^1.167.0",
+    "solid-js": "^1.9.13"
+  },
+  "devDependencies": {
+    "@template/eslint-config": "workspace:*",
+    "@solidjs/testing-library": "^0.8.10",
+    "@tanstack/devtools-vite": "^0.7.0",
+    "@tanstack/eslint-config": "^0.3.4",
+    "@tanstack/router-cli": "^1.167.17",
+    "@tanstack/router-plugin": "^1.168.18",
+    "eslint": "^9.39.4",
+    "jsdom": "^28.1.0",
+    "prettier": "^3.8.4",
+    "typescript": "^6.0.3",
+    "vite": "^8.0.16",
+    "vite-plugin-solid": "^2.11.12",
+    "vitest": "4.1.7"
+  }
+}
