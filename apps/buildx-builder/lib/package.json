@@ -17,11 +17,11 @@
   "scripts": {
     "build": "tsdown",
     "dev": "tsdown --watch",
-    "test": "vitest run tests/index.test.ts",
+    "test": "vitest run tests",
     "check-types": "tsgo --skipLibCheck --noEmit",
     "format": "oxfmt . --write",
     "lint": "oxlint src --fix",
-    "test:coverage": "vitest run tests/index.test.ts --coverage",
+    "test:coverage": "vitest run tests --coverage",
     "check": "pnpm run check-types && pnpm run format && pnpm run lint && pnpm run test:coverage",
     "release": "bumpp",
     "prepublishOnly": "pnpm run build"
