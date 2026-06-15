@@ -13,17 +13,22 @@
     "check": "prettier --check ."
   },
   "dependencies": {
+    "@rs/ryan-personal-website-design": "^0.0.1",
     "@tanstack/router-plugin": "^1.133.21",
     "@tanstack/solid-router": "latest",
     "@tanstack/solid-router-devtools": "latest",
+    "@vanilla-extract/recipes": "^0.5.7",
+    "@vanilla-extract/sprinkles": "^1.6.5",
     "solid-js": "^1.9.12"
   },
   "devDependencies": {
     "@solidjs/testing-library": "^0.8.10",
     "@tanstack/devtools-vite": "latest",
-    "@tanstack/eslint-config": "latest",
+    "@tanstack/eslint-config": "^0.3.4",
     "@tanstack/router-cli": "^1.133.21",
     "@tanstack/router-plugin": "latest",
+    "@vanilla-extract/css": "^1.20.1",
+    "@vanilla-extract/vite-plugin": "^5.2.2",
     "eslint": "^9.20.0",
     "jsdom": "^28.1.0",
     "prettier": "^3.8.1",
@@ -31,12 +36,5 @@
     "vite": "^8.0.0",
     "vite-plugin-solid": "^2.11.12",
     "vitest": "^4.1.5"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "lightningcss"
-    ]
   }
 }
-
