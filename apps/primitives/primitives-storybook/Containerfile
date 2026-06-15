@@ -1,0 +1,45 @@
+# syntax=docker/dockerfile:1
+# Build context is the monorepo root (apps/primitives-storybook is a pnpm
+# workspace member). Produces a tiny static image: the built Storybook bundle
+# served by busybox httpd.
+
+ARG NODE_VERSION=22-alpine
+ARG PNPM_VERSION=10.33.2
+ARG TURBO_VERSION=2.9.14
+
+# --- base: shared toolchain for prune + build ---
+FROM node:${NODE_VERSION} AS base
+ARG PNPM_VERSION
+ARG TURBO_VERSION
+RUN corepack enable \
+  && corepack prepare pnpm@${PNPM_VERSION} --activate \
+  && npm install --global turbo@${TURBO_VERSION}
+WORKDIR /repo
+
+# --- prune: isolate the storybook workspace and its dependency closure ---
+FROM base AS prepare
+COPY . .
+RUN turbo prune @rs/primitives-storybook --docker
+
+# --- build ---
+FROM base AS build
+# Install dependencies from the pruned lockfile (cached across builds when deps
+# are unchanged).
+COPY --from=prepare /repo/out/json/ .
+RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store \
+  pnpm install --frozen-lockfile --store-dir=/pnpm/store
+# Bring in the pruned source and build through turbo. `^build` first builds the
+# component library closure (@rs/solid-primitives, @rs/storybook).
+COPY --from=prepare /repo/out/full/ .
+RUN --mount=type=cache,id=turbo-primitives-storybook-cache,target=/repo/.turbo/cache \
+  turbo run build --filter=@rs/primitives-storybook
+
+# --- production: static files served by busybox httpd ---
+# busybox httpd needs no writable directories, so the Deployment can run with
+# readOnlyRootFilesystem: true and a non-root user (UID 10001) with no volumes.
+FROM busybox:1.37-musl AS production
+LABEL dev.k8s.image="primitives-storybook"
+COPY --from=build /repo/apps/primitives-storybook/storybook-static /www
+EXPOSE 8080
+USER 10001
+CMD ["httpd", "-f", "-v", "-p", "8080", "-h", "/www"]

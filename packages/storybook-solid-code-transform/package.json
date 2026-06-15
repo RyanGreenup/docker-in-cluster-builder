@@ -1,0 +1,81 @@
+{
+  "name": "@rs/storybook-solid-code-transform",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Storybook docs source transform: inline story args into the render JSX for the Solid renderer.",
+  "homepage": "https://github.com/RyanGreenup/kubernetes-3#readme",
+  "bugs": {
+    "url": "https://github.com/RyanGreenup/kubernetes-3/issues"
+  },
+  "license": "MIT",
+  "author": "Ryan Greenup <ryanxgreenup@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RyanGreenup/kubernetes-3.git"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "types": "./dist/browser.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/browser.d.ts",
+      "node": "./dist/node.mjs",
+      "browser": "./dist/browser.js",
+      "import": "./dist/browser.js",
+      "default": "./dist/browser.js"
+    },
+    "./core": {
+      "types": "./dist/core.d.ts",
+      "import": "./dist/core.js",
+      "default": "./dist/core.js"
+    },
+    "./node": {
+      "types": "./dist/node.d.mts",
+      "import": "./dist/node.mjs",
+      "default": "./dist/node.mjs"
+    },
+    "./browser": {
+      "types": "./dist/browser.d.ts",
+      "import": "./dist/browser.js",
+      "default": "./dist/browser.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "lint": "oxlint -c ./.config/oxlint.config.ts src test",
+    "format": "oxfmt -c ./.config/oxfmtrc.ts --check .",
+    "format:write": "oxfmt -c ./.config/oxfmtrc.ts .",
+    "check-types": "tsgo --skipLibCheck --noEmit",
+    "check": "echo \"$npm_package_name check ok\"",
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "test:browser": "vitest run --config vitest.browser.config.ts",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@babel/generator": "7.29.1",
+    "@babel/parser": "7.29.7",
+    "@babel/traverse": "7.29.0",
+    "@babel/types": "7.29.7"
+  },
+  "devDependencies": {
+    "@babel/standalone": "^7.29.7",
+    "@rs/oxlint-config": "workspace:*",
+    "@types/babel__generator": "^7.27.0",
+    "@types/babel__standalone": "^7.1.9",
+    "@types/babel__traverse": "^7.28.0",
+    "@types/node": "^25.9.1",
+    "@typescript/native-preview": "^7.0.0-dev.20260524.1",
+    "@vitest/coverage-v8": "4.1.7",
+    "oxfmt": "^0.51.0",
+    "oxlint": "^1.65.0",
+    "playwright": "^1.60.0",
+    "tsdown": "^0.22.0",
+    "typescript": "^6.0.3",
+    "vite": "7.3.3",
+    "vitest": "4.1.7"
+  }
+}

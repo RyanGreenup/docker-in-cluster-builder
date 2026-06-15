@@ -5,3 +5,7 @@ coverage
 *.tsbuildinfo
 .DS_Store
 .turbo
+apps/primitives/primitives-storybook/.codemap
+apps/primitives/primitives-storybook/storybook-static
+apps/primitives/solid-primitives/.codemap
+packages/storybook/.codemap

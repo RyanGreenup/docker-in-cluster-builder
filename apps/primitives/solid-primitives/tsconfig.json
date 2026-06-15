@@ -1,0 +1,8 @@
+{
+  "extends": "@rs/typescript-config/solid-library.json",
+  "compilerOptions": {
+    "declarationMap": true,
+    "ignoreDeprecations": "6.0"
+  },
+  "exclude": ["node_modules", "dist", "./dev"]
+}
