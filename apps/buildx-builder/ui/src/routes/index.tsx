@@ -1,6 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/solid-router'
 import { Button } from '../components/Button'
-import { HelloWorld } from '@rs/buildx-builder-server'
 
 export const Route = createFileRoute('/')({ component: Home })
 
@@ -38,7 +37,6 @@ function Home() {
         <Button variant="ghost">Ghost</Button>
         <Button variant="danger">Danger</Button>
         <Button variant="link">Link</Button>
-        <Button variant="link">{HelloWorld()}</Button>
       </div>
 
       <div
