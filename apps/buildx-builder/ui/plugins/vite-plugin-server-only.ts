@@ -74,11 +74,18 @@ export function serverOnlyGuard(options: ServerOnlyGuardOptions): Plugin {
 
   // Guarded roots: explicit directories plus each server-only package's root.
   // The package must expose `./package.json` in its exports for this to resolve.
+  // Resolution is tolerant: a package that is not resolvable from this graph
+  // cannot be imported anyway, so it is skipped now and guarded automatically
+  // the moment it becomes resolvable (e.g. if it is later added as a dependency).
   const guardedRoots = [
     ...(options.roots ?? []).map((root) => realPath(path.resolve(base, root))),
-    ...(options.packages ?? []).map((pkg) =>
-      realPath(path.dirname(require.resolve(`${pkg}/package.json`))),
-    ),
+    ...(options.packages ?? []).flatMap((pkg) => {
+      try {
+        return [realPath(path.dirname(require.resolve(`${pkg}/package.json`)))]
+      } catch {
+        return []
+      }
+    }),
   ]
 
   return {

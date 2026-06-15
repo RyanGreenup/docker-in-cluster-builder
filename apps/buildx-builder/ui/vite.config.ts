@@ -22,7 +22,10 @@ export default defineConfig({
     serverOnlyGuard({
       resolveFrom: import.meta.url,
       roots: ['./src/server'],
-      packages: ['@rs/buildx-builder-api'],
+      // `@rs/buildx-builder-lib` is not a declared UI dependency today, so it is
+      // not resolvable and the guard skips it; listing it means it is blocked
+      // automatically if it ever becomes reachable (it spawns docker buildx).
+      packages: ['@rs/buildx-builder-api', '@rs/buildx-builder-lib'],
     }),
     devtools(),
     tanstackRouter({ target: 'solid', autoCodeSplitting: true }),
