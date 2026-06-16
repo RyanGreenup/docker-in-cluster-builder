@@ -1,14 +1,14 @@
 {
   "name": "@rs/eslint-config",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.0.1",
+  "private": false,
   "type": "module",
-  "scripts": {
-    "check": "echo 'No checks configured'"
-  },
   "exports": {
     "./base": "./base.js",
     "./solid-js": "./solid-js.js"
+  },
+  "scripts": {
+    "check": "echo 'No checks configured'"
   },
   "dependencies": {
     "eslint-plugin-jsdoc": "^50.8.0",
@@ -17,10 +17,10 @@
     "eslint-plugin-turbo": "^2.9.18",
     "eslint-plugin-unicorn": "^60.0.0"
   },
-  "peerDependencies": {
+  "devDependencies": {
     "eslint": "^9.39.4"
   },
-  "devDependencies": {
+  "peerDependencies": {
     "eslint": "^9.39.4"
   }
 }
