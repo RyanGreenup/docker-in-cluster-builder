@@ -68,6 +68,7 @@ export const navItem = style({
   fontSize: textSize.sm,
   fontWeight: fontWeight.medium,
   textAlign: 'left',
+  textDecoration: 'none',
   cursor: 'pointer',
   transition: transition.fast,
   selectors: {
@@ -75,8 +76,8 @@ export const navItem = style({
       background: vars.roles.bg.hover,
       color: vars.roles.fg.base,
     },
-    // navItemProps() sets aria-current="page" on the active row, so the active
-    // skin keys off it: one class, no second active class to thread through.
+    // The router's <Link> sets aria-current="page" on the active row, so the
+    // active skin keys off it: one class, no separate active state to thread.
     '&[aria-current="page"]': {
       background: vars.roles.brand.primarySubtle,
       color: vars.roles.brand.primary,
@@ -127,6 +128,7 @@ export const tab = style({
   color: vars.roles.fg.subtle,
   fontFamily: font.sans,
   fontSize: textSize.xs,
+  textDecoration: 'none',
   cursor: 'pointer',
   transition: transition.fast,
   selectors: {

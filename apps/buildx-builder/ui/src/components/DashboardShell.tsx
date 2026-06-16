@@ -1,74 +1,60 @@
-import { createSignal, For, Show, type JSXElement } from 'solid-js'
-import { useNavigate } from '@tanstack/solid-router'
+import { For, type JSXElement } from 'solid-js'
+import { Link, useRouterState } from '@tanstack/solid-router'
 import { DashboardLayout } from '@rs/layout'
 import { Button } from './Button'
 import * as styles from './dashboard-shell.css'
 
-// Exemplar: a dashboard shell built on the headless `DashboardLayout` from
-// @rs/layout, skinned with the design system (see dashboard-shell.css.ts).
+// The app-wide shell, built on the headless `DashboardLayout` from @rs/layout and
+// skinned with the design system (see dashboard-shell.css.ts).
 //
-// The layout owns structure and behaviour: the desktop sidebar + navbar + main
+// @rs/layout owns structure and behaviour: the desktop sidebar + navbar + main
 // grid, the sidebar collapsing into a drawer below 1024px, the scrim, and the
-// bottom tab bar. We supply only the slot content and a `classes` skin. The
-// active nav row and active tab are app state, held here as signals.
+// bottom tab bar. We supply only the slot content and a `classes` skin.
+//
+// This renders inside the pathless `_shell` layout route, so `children` is the
+// router <Outlet/>. Nav is driven by the router: each row is a <Link>, and the
+// active row gets `aria-current="page"` automatically (the skin styles that),
+// so there is no local "active" state to keep in sync with the URL.
 
-/** A sidebar destination. `to` makes the row navigate to a real route. */
+/** Sidebar destinations. `to` is a real route under the `_shell` layout. */
+type ShellPath = '/' | '/builds' | '/artifacts' | '/pipelines' | '/settings'
+
 interface NavItem {
   readonly label: string
-  readonly to?: '/builds'
+  readonly to: ShellPath
+  /** Match the path exactly (used for '/', so it is not active everywhere). */
+  readonly exact?: boolean
 }
 
 const NAV: readonly NavItem[] = [
-  { label: 'Overview' },
+  { label: 'Overview', to: '/', exact: true },
   { label: 'Builds', to: '/builds' },
-  { label: 'Artifacts' },
-  { label: 'Pipelines' },
-  { label: 'Settings' },
+  { label: 'Artifacts', to: '/artifacts' },
+  { label: 'Pipelines', to: '/pipelines' },
+  { label: 'Settings', to: '/settings' },
 ]
-const TABS = ['Home', 'Builds', 'Artifacts', 'Activity'] as const
 
-const SECTIONS = [
-  {
-    title: 'Headless by construction',
-    body: 'The grid, the responsive reflow and the drawer mechanics all live in @rs/layout. This page supplies only slot content and a design-system skin.',
-  },
-  {
-    title: 'One piece of shared state',
-    body: 'Only the drawer open/close state lives in the layout. The active destination is app state, passed to navItemProps so the active row gets aria-current=page.',
-  },
-  {
-    title: 'Themed for free',
-    body: 'Every colour comes from the design theme contract, so the shell flips light/dark with the rest of the app and never hard-codes a value.',
-  },
-] as const
-
-function DefaultContent(props: { active: string }): JSXElement {
-  return (
-    <>
-      <h1 class={styles.pageTitle}>{props.active}</h1>
-      <div class={styles.cardGrid}>
-        <For each={SECTIONS}>
-          {(section) => (
-            <article class={styles.card}>
-              <h2 class={styles.cardTitle}>{section.title}</h2>
-              <p class={styles.cardBody}>{section.body}</p>
-            </article>
-          )}
-        </For>
-      </div>
-    </>
-  )
-}
+// The mobile bottom bar surfaces the primary destinations.
+const TABS: readonly NavItem[] = [NAV[0], NAV[1], NAV[2], NAV[4]]
 
 export interface DashboardShellProps {
-  /** Optional content for the main panel; defaults to the exemplar copy. */
-  children?: JSXElement
+  /** Main-panel content; supplied by the layout route as the router <Outlet/>. */
+  children: JSXElement
 }
 
 export function DashboardShell(props: DashboardShellProps): JSXElement {
-  const [active, setActive] = createSignal<string>('Overview')
-  const [tab, setTab] = createSignal<string>('Home')
-  const navigate = useNavigate()
+  const pathname = useRouterState({
+    select: (state) => state.location.pathname,
+  })
+
+  // Navbar title derived from the route, matching the active nav row.
+  const title = (): string => {
+    const path = pathname()
+    const match = NAV.find((item) =>
+      item.exact ? path === item.to : path.startsWith(item.to),
+    )
+    return match?.label ?? 'Buildx'
+  }
 
   return (
     <DashboardLayout
@@ -83,19 +69,14 @@ export function DashboardShell(props: DashboardShellProps): JSXElement {
       nav={(ctx) => (
         <For each={NAV}>
           {(item) => (
-            <button
-              {...ctx.navItemProps({
-                active: active() === item.label,
-                onSelect: () => {
-                  setActive(item.label)
-                  if (item.to) {
-                    void navigate({ to: item.to })
-                  }
-                },
-              })}
+            <Link
+              to={item.to}
+              class={styles.navItem}
+              activeOptions={item.exact ? { exact: true } : undefined}
+              onClick={() => ctx.closeDrawer()}
             >
               {item.label}
-            </button>
+            </Link>
           )}
         </For>
       )}
@@ -109,32 +90,27 @@ export function DashboardShell(props: DashboardShellProps): JSXElement {
       )}
       actions={() => (
         <>
-          <strong class={styles.navTitle}>{active()}</strong>
+          <strong class={styles.navTitle}>{title()}</strong>
           <span class={styles.navSpacer} />
           <Button size="sm">New build</Button>
         </>
       )}
-      bottomBar={() => (
+      bottomBar={(ctx) => (
         <For each={TABS}>
-          {(label) => (
-            <button
-              type="button"
+          {(item) => (
+            <Link
+              to={item.to}
               class={styles.tab}
-              aria-current={tab() === label ? 'page' : undefined}
-              onClick={() => setTab(label)}
+              activeOptions={item.exact ? { exact: true } : undefined}
+              onClick={() => ctx.closeDrawer()}
             >
-              {label}
-            </button>
+              {item.label}
+            </Link>
           )}
         </For>
       )}
     >
-      <Show
-        when={props.children}
-        fallback={<DefaultContent active={active()} />}
-      >
-        {props.children}
-      </Show>
+      {props.children}
     </DashboardLayout>
   )
 }

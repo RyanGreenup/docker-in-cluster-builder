@@ -9,86 +9,152 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as DashboardRouteImport } from './routes/dashboard'
-import { Route as BuildsRouteImport } from './routes/builds'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as ShellRouteImport } from './routes/_shell'
+import { Route as ShellIndexRouteImport } from './routes/_shell.index'
+import { Route as ShellSettingsRouteImport } from './routes/_shell.settings'
+import { Route as ShellPipelinesRouteImport } from './routes/_shell.pipelines'
+import { Route as ShellBuildsRouteImport } from './routes/_shell.builds'
+import { Route as ShellArtifactsRouteImport } from './routes/_shell.artifacts'
 
-const DashboardRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
+const ShellRoute = ShellRouteImport.update({
+  id: '/_shell',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BuildsRoute = BuildsRouteImport.update({
-  id: '/builds',
-  path: '/builds',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IndexRoute = IndexRouteImport.update({
+const ShellIndexRoute = ShellIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => ShellRoute,
+} as any)
+const ShellSettingsRoute = ShellSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => ShellRoute,
+} as any)
+const ShellPipelinesRoute = ShellPipelinesRouteImport.update({
+  id: '/pipelines',
+  path: '/pipelines',
+  getParentRoute: () => ShellRoute,
+} as any)
+const ShellBuildsRoute = ShellBuildsRouteImport.update({
+  id: '/builds',
+  path: '/builds',
+  getParentRoute: () => ShellRoute,
+} as any)
+const ShellArtifactsRoute = ShellArtifactsRouteImport.update({
+  id: '/artifacts',
+  path: '/artifacts',
+  getParentRoute: () => ShellRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/builds': typeof BuildsRoute
-  '/dashboard': typeof DashboardRoute
+  '/': typeof ShellIndexRoute
+  '/artifacts': typeof ShellArtifactsRoute
+  '/builds': typeof ShellBuildsRoute
+  '/pipelines': typeof ShellPipelinesRoute
+  '/settings': typeof ShellSettingsRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/builds': typeof BuildsRoute
-  '/dashboard': typeof DashboardRoute
+  '/artifacts': typeof ShellArtifactsRoute
+  '/builds': typeof ShellBuildsRoute
+  '/pipelines': typeof ShellPipelinesRoute
+  '/settings': typeof ShellSettingsRoute
+  '/': typeof ShellIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/builds': typeof BuildsRoute
-  '/dashboard': typeof DashboardRoute
+  '/_shell': typeof ShellRouteWithChildren
+  '/_shell/artifacts': typeof ShellArtifactsRoute
+  '/_shell/builds': typeof ShellBuildsRoute
+  '/_shell/pipelines': typeof ShellPipelinesRoute
+  '/_shell/settings': typeof ShellSettingsRoute
+  '/_shell/': typeof ShellIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/builds' | '/dashboard'
+  fullPaths: '/' | '/artifacts' | '/builds' | '/pipelines' | '/settings'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/builds' | '/dashboard'
-  id: '__root__' | '/' | '/builds' | '/dashboard'
+  to: '/artifacts' | '/builds' | '/pipelines' | '/settings' | '/'
+  id:
+    | '__root__'
+    | '/_shell'
+    | '/_shell/artifacts'
+    | '/_shell/builds'
+    | '/_shell/pipelines'
+    | '/_shell/settings'
+    | '/_shell/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  BuildsRoute: typeof BuildsRoute
-  DashboardRoute: typeof DashboardRoute
+  ShellRoute: typeof ShellRouteWithChildren
 }
 
 declare module '@tanstack/solid-router' {
   interface FileRoutesByPath {
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
+    '/_shell': {
+      id: '/_shell'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof ShellRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/builds': {
-      id: '/builds'
-      path: '/builds'
-      fullPath: '/builds'
-      preLoaderRoute: typeof BuildsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/': {
-      id: '/'
+    '/_shell/': {
+      id: '/_shell/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof ShellIndexRouteImport
+      parentRoute: typeof ShellRoute
+    }
+    '/_shell/settings': {
+      id: '/_shell/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof ShellSettingsRouteImport
+      parentRoute: typeof ShellRoute
+    }
+    '/_shell/pipelines': {
+      id: '/_shell/pipelines'
+      path: '/pipelines'
+      fullPath: '/pipelines'
+      preLoaderRoute: typeof ShellPipelinesRouteImport
+      parentRoute: typeof ShellRoute
+    }
+    '/_shell/builds': {
+      id: '/_shell/builds'
+      path: '/builds'
+      fullPath: '/builds'
+      preLoaderRoute: typeof ShellBuildsRouteImport
+      parentRoute: typeof ShellRoute
+    }
+    '/_shell/artifacts': {
+      id: '/_shell/artifacts'
+      path: '/artifacts'
+      fullPath: '/artifacts'
+      preLoaderRoute: typeof ShellArtifactsRouteImport
+      parentRoute: typeof ShellRoute
     }
   }
 }
 
+interface ShellRouteChildren {
+  ShellArtifactsRoute: typeof ShellArtifactsRoute
+  ShellBuildsRoute: typeof ShellBuildsRoute
+  ShellPipelinesRoute: typeof ShellPipelinesRoute
+  ShellSettingsRoute: typeof ShellSettingsRoute
+  ShellIndexRoute: typeof ShellIndexRoute
+}
+
+const ShellRouteChildren: ShellRouteChildren = {
+  ShellArtifactsRoute: ShellArtifactsRoute,
+  ShellBuildsRoute: ShellBuildsRoute,
+  ShellPipelinesRoute: ShellPipelinesRoute,
+  ShellSettingsRoute: ShellSettingsRoute,
+  ShellIndexRoute: ShellIndexRoute,
+}
+
+const ShellRouteWithChildren = ShellRoute._addFileChildren(ShellRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  BuildsRoute: BuildsRoute,
-  DashboardRoute: DashboardRoute,
+  ShellRoute: ShellRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

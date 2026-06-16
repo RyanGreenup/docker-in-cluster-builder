@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from '@tanstack/solid-router'
+import { createFileRoute } from '@tanstack/solid-router'
 import { createResource, For, Show } from 'solid-js'
 
 import { Button } from '../components/Button'
@@ -9,27 +9,25 @@ async function fetchPlanets() {
   return client.planet.list({ cursor: 0 })
 }
 
-export const Route = createFileRoute('/')({ component: Home })
+export const Route = createFileRoute('/_shell/')({ component: Home })
 
 function Home() {
   const [planets] = createResource(fetchPlanets)
 
   return (
-    <div style={{ padding: '2rem', 'font-family': 'var(--font-sans)' }}>
+    <>
       <h1>Welcome to TanStack Start</h1>
       <p>
-        Edit <code>src/routes/index.tsx</code> to get started.
-      </p>
-      <p>
-        See the <Link to="/dashboard">dashboard layout</Link> built on{' '}
-        <code>@rs/layout</code> (<code>src/components/DashboardShell.tsx</code>
-        ).
+        Edit <code>src/routes/_shell.index.tsx</code> to get started. This page
+        renders inside the app shell (
+        <code>src/components/DashboardShell.tsx</code>), the pathless{' '}
+        <code>_shell</code> layout route built on <code>@rs/layout</code>.
       </p>
 
       <h2>oRPC Example: Planets</h2>
       <Show
         when={!planets.loading}
-        fallback={<p aria-busy="true">Loading planets…</p>}
+        fallback={<p aria-busy="true">Loading planets...</p>}
       >
         <Show
           when={!planets.error}
@@ -87,6 +85,6 @@ function Home() {
         <Button loading>Loading</Button>
         <Button disabled>Disabled</Button>
       </div>
-    </div>
+    </>
   )
 }
